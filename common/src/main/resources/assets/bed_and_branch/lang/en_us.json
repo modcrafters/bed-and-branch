@@ -1,0 +1,16 @@
+{
+  "itemGroup.bed_and_branch": "Bed & Branch",
+  "block.bed_and_branch.loam": "Loam",
+  "block.bed_and_branch.peat": "Peat",
+  "block.bed_and_branch.flooded_mud": "Flooded Mud",
+  "block.bed_and_branch.farmland": "Tilled Soil",
+  "block.bed_and_branch.tomato": "Tomato",
+  "block.bed_and_branch.crop_stick": "Crop Stick",
+  "item.bed_and_branch.loam": "Loam",
+  "item.bed_and_branch.peat": "Peat",
+  "item.bed_and_branch.flooded_mud": "Flooded Mud",
+  "item.bed_and_branch.farmland": "Tilled Soil",
+  "item.bed_and_branch.tomato": "Tomato",
+  "item.bed_and_branch.tomato_seeds": "Tomato Seeds",
+  "item.bed_and_branch.crop_stick": "Crop Stick"
+}

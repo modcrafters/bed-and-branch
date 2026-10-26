@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "age=0,staked=false": { "model": "minecraft:block/wheat_stage0" },
+    "age=0,staked=true": { "model": "minecraft:block/wheat_stage0" },
+    "age=1,staked=false": { "model": "minecraft:block/wheat_stage1" },
+    "age=1,staked=true": { "model": "minecraft:block/wheat_stage1" },
+    "age=2,staked=false": { "model": "minecraft:block/wheat_stage2" },
+    "age=2,staked=true": { "model": "minecraft:block/wheat_stage2" },
+    "age=3,staked=false": { "model": "minecraft:block/wheat_stage3" },
+    "age=3,staked=true": { "model": "minecraft:block/wheat_stage3" },
+    "age=4,staked=false": { "model": "minecraft:block/wheat_stage4" },
+    "age=4,staked=true": { "model": "minecraft:block/wheat_stage4" },
+    "age=5,staked=false": { "model": "minecraft:block/wheat_stage5" },
+    "age=5,staked=true": { "model": "minecraft:block/wheat_stage5" },
+    "age=6,staked=false": { "model": "minecraft:block/wheat_stage6" },
+    "age=6,staked=true": { "model": "minecraft:block/wheat_stage6" },
+    "age=7,staked=false": { "model": "minecraft:block/wheat_stage7" },
+    "age=7,staked=true": { "model": "minecraft:block/wheat_stage7" }
+  }
+}
+
