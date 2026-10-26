@@ -1,0 +1,13 @@
+# private agent/design docs live in faceofcat/mod-design
+AGENTS.md
+.agent/
+docs/DESIGN.md
+docs/ROADMAP.md
+.cursor/
+# build
+.gradle/
+build/
+run/
+out/
+.idea/
+*.iml
