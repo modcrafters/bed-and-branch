@@ -6,7 +6,7 @@ Funny sibling to [Barnyard Romance](https://github.com/modcrafters/barnyard-roma
 
 ## Loaders
 
-Multi-loader: `common` / `fabric` / `neoforge`, Java 21, IntelliJ-friendly.
+Multi-loader: `common` / `fabric` / `neoforge`, Java 25, Minecraft 26.3, IntelliJ-friendly.
 
 - Mod id: `bed_and_branch`
 - Package: `com.bedandbranch`
