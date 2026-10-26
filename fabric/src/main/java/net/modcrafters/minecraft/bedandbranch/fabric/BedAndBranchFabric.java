@@ -1,6 +1,6 @@
-package com.bedandbranch.fabric;
+package net.modcrafters.minecraft.bedandbranch.fabric;
 
-import com.bedandbranch.Constants;
+import net.modcrafters.minecraft.bedandbranch.Constants;
 import net.fabricmc.api.ModInitializer;
 
 public class BedAndBranchFabric implements ModInitializer {

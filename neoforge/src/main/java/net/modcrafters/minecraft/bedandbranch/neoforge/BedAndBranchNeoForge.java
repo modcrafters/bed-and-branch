@@ -1,7 +1,7 @@
-package com.bedandbranch.neoforge;
+package net.modcrafters.minecraft.bedandbranch.neoforge;
 
-import com.bedandbranch.Constants;
-import com.bedandbranch.neoforge.client.BedAndBranchNeoForgeClient;
+import net.modcrafters.minecraft.bedandbranch.Constants;
+import net.modcrafters.minecraft.bedandbranch.neoforge.client.BedAndBranchNeoForgeClient;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;

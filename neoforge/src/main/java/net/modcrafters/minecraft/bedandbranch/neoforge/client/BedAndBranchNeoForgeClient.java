@@ -1,4 +1,4 @@
-package com.bedandbranch.neoforge.client;
+package net.modcrafters.minecraft.bedandbranch.neoforge.client;
 
 import net.neoforged.bus.api.IEventBus;
 

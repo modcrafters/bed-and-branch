@@ -11,10 +11,10 @@
     "environment": "*",
     "entrypoints": {
         "main": [
-            "com.bedandbranch.fabric.BedAndBranchFabric"
+            "net.modcrafters.minecraft.bedandbranch.fabric.BedAndBranchFabric"
         ],
         "client": [
-            "com.bedandbranch.fabric.client.BedAndBranchFabricClient"
+            "net.modcrafters.minecraft.bedandbranch.fabric.client.BedAndBranchFabricClient"
         ]
     },
     "mixins": [

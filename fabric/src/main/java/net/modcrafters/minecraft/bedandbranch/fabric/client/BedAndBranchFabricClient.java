@@ -1,4 +1,4 @@
-package com.bedandbranch.fabric.client;
+package net.modcrafters.minecraft.bedandbranch.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
 
