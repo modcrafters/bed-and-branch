@@ -8,6 +8,16 @@ docs/ROADMAP.md
 .gradle/
 build/
 run/
+runs/
 out/
 .idea/
+.vscode/
 *.iml
+*.ipr
+*.iws
+bin/
+*.launch
+.settings/
+.metadata
+.classpath
+.project
