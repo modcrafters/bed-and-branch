@@ -8,6 +8,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+//? if <1.21.2
+//import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -62,6 +64,23 @@ public final class SeedPlanting {
         }
         return InteractionResult.SUCCESS;
     }
+
+    // 1.21.1 block use returns ItemInteractionResult. 1.21.2 folded that back into InteractionResult.
+    //? if >=1.21.2 {
+    //?} else {
+    /*public static ItemInteractionResult asItem(InteractionResult result) {
+        if (result == InteractionResult.SUCCESS) {
+            return ItemInteractionResult.SUCCESS;
+        }
+        if (result == InteractionResult.CONSUME) {
+            return ItemInteractionResult.CONSUME;
+        }
+        if (result == InteractionResult.FAIL) {
+            return ItemInteractionResult.FAIL;
+        }
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+    *///?}
 
     private static BlockState cropState(ItemStack stack) {
         if (stack.getItem() instanceof TomatoSeedsItem) {

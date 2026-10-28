@@ -14,13 +14,17 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+//? if <1.21.2
+//import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.LevelReader;
+//? if >=1.21.2
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -30,7 +34,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 
 public class SoilFarmlandBlock extends FarmlandBlock {
     public SoilFarmlandBlock(Properties properties) {
+        // Farmland names the dirt block it collapses back into since 26.1.
+        //? if >=26.1 {
         super(Blocks.DIRT, properties);
+        //?} else
+        //super(properties);
         registerDefaultState(defaultBlockState().setValue(SoilState.PROPERTY, SoilState.LOAM));
     }
 
@@ -47,6 +55,7 @@ public class SoilFarmlandBlock extends FarmlandBlock {
         return state.setValue(SoilState.PROPERTY, SoilState.of(kind));
     }
 
+    //? if >=1.21.2 {
     @Override
     protected BlockState updateShape(
             BlockState state,
@@ -62,17 +71,22 @@ public class SoilFarmlandBlock extends FarmlandBlock {
             ticks.scheduleTick(pos, this, 1);
             return state;
         }
+        return super.updateShape(withSoil(state, level, pos), level, ticks, pos, direction, neighborPos, neighborState, random);
+    }
+    //?} else {
+    /*@Override
+    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+        if (collapses(level, pos)) {
+            level.scheduleTick(pos, this, 1);
+            return state;
+        }
+        return super.updateShape(withSoil(state, level, pos), direction, neighborState, level, pos, neighborPos);
+    }
+    *///?}
+
+    private BlockState withSoil(BlockState state, LevelReader level, BlockPos pos) {
         SoilKind kind = SoilLookup.kindOf(level.getBlockState(pos.below())).orElseThrow();
-        return super.updateShape(
-                state.setValue(SoilState.PROPERTY, SoilState.of(kind)),
-                level,
-                ticks,
-                pos,
-                direction,
-                neighborPos,
-                neighborState,
-                random
-        );
+        return state.setValue(SoilState.PROPERTY, SoilState.of(kind));
     }
 
     @Override
@@ -90,6 +104,7 @@ public class SoilFarmlandBlock extends FarmlandBlock {
         return !collapses(level, pos) && super.canSurvive(state, level, pos);
     }
 
+    //? if >=1.21.2 {
     @Override
     protected InteractionResult useItemOn(
             ItemStack stack,
@@ -100,19 +115,46 @@ public class SoilFarmlandBlock extends FarmlandBlock {
             InteractionHand hand,
             BlockHitResult hit
     ) {
-        BlockPos above = pos.above();
-        BlockState crop = level.getBlockState(above);
-        if (crop.is(ModBlocks.CROP_STICK)) {
-            InteractionResult planted = SeedPlanting.tryPlant(level, player, stack, above);
-            if (planted.consumesAction()) {
-                return planted;
-            }
-            InteractionResult harvested = CropStickBlock.harvest(level, above, crop);
-            if (harvested.consumesAction()) {
-                return harvested;
-            }
+        InteractionResult handled = useSoil(stack, level, pos, player);
+        if (handled != null) {
+            return handled;
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hit);
+    }
+    //?} else {
+    /*@Override
+    protected ItemInteractionResult useItemOn(
+            ItemStack stack,
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            InteractionHand hand,
+            BlockHitResult hit
+    ) {
+        InteractionResult handled = useSoil(stack, level, pos, player);
+        if (handled != null) {
+            return SeedPlanting.asItem(handled);
+        }
+        return super.useItemOn(stack, state, level, pos, player, hand, hit);
+    }
+    *///?}
+
+    private InteractionResult useSoil(ItemStack stack, Level level, BlockPos pos, Player player) {
+        BlockPos above = pos.above();
+        BlockState crop = level.getBlockState(above);
+        if (!crop.is(ModBlocks.CROP_STICK)) {
+            return null;
+        }
+        InteractionResult planted = SeedPlanting.tryPlant(level, player, stack, above);
+        if (planted.consumesAction()) {
+            return planted;
+        }
+        InteractionResult harvested = CropStickBlock.harvest(level, above, crop);
+        if (harvested.consumesAction()) {
+            return harvested;
+        }
+        return null;
     }
 
     @Override
@@ -120,8 +162,19 @@ public class SoilFarmlandBlock extends FarmlandBlock {
         return Component.translatable("item.bed_and_branch.farmland");
     }
 
+    //? if >=1.21.5 {
     @Override
     protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
+        return namedClone(state);
+    }
+    //?} else {
+    /*@Override
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+        return namedClone(state);
+    }
+    *///?}
+
+    private ItemStack namedClone(BlockState state) {
         ItemStack stack = new ItemStack(this);
         stack.set(DataComponents.ITEM_NAME, Component.translatable(state.getValue(SoilState.PROPERTY).kind().farmlandNameKey()));
         return stack;

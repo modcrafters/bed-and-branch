@@ -23,10 +23,12 @@ IDEA 2025.2 or newer is required for Java 25.
 The build uses [Stonecutter](https://stonecutter.kikugie.dev) so one codebase can build for several Minecraft versions:
 
 - The common code is in `src/`. Fabric code is in `fabric/src`, and NeoForge code is in `neoforge/src`.
-- Each Minecraft version is its own Gradle project: `:26.3` (common), `:fabric:26.3` and `:neoforge:26.3`. Each one's `gradle.properties` under `versions/<mc>` holds that version's Minecraft, Java and loader versions.
+- Each Minecraft version is its own Gradle project: `:26.3` and `:1.21.1` (common), `:fabric:26.3`, `:neoforge:26.3` and `:neoforge:1.21.1`. Fabric is 26.3 only. Each one's `gradle.properties` under `versions/<mc>` holds that version's Minecraft, Java and loader versions.
 - Code that differs between versions is marked with comments such as `//? if >=1.21.6 {`. The IDE always shows one version, the *active* one.
 - Switch with the Gradle task `Set active project to <mc>`. Run `Reset active project` before you commit: git must always hold the 26.3 state, and CI checks this.
 
 `gradlew collectJars` builds every loader jar and copies them to `build/libs/<mod version>/`. Each jar's own build output is under `<loader>/versions/<mc>/build/libs`. The common jars are not mods you install.
 
-`gradlew :26.3:test` runs the unit tests. CI (`.github/workflows/ci.yml`) builds both loaders on every pull request. The `all-versions` check passes only when every version passed; it is the check for a ruleset on `main` to require.
+`gradlew :26.3:test` and `gradlew :1.21.1:test` run the unit tests. CI (`.github/workflows/ci.yml`) builds Fabric and NeoForge 26.3 and NeoForge 1.21.1 on every pull request. The `all-versions` check passes only when every version passed; it is the check for a ruleset on `main` to require.
+
+Looking at a plant can show its soil through [Jade](https://modrinth.com/mod/jade). Jade is optional on both versions. Its plugin interfaces are still named Waila; that is Jade's API, not a second mod.

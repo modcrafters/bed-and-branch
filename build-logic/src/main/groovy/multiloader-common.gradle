@@ -36,22 +36,30 @@ def overridden = { FileTreeElement element ->
         element.file.toPath().startsWith(dirs.shared) && new File(dirs.local, element.relativePath.pathString).exists()
     }
 }
-// Stonecutter's generate task reads the shared sources, which the merge task also writes.
-tasks.named('stonecutterGenerate').configure {
-    dependsOn('stonecutterMerge')
+// The active version compiles the shared sources directly. Its merge task writes those same folders, so the
+// tasks that read them have to depend on the merge or Gradle rejects the implicit dependency. Inactive
+// versions compile Stonecutter's generated copy; depending on their merge would copy that version back
+// over the shared sources.
+def activeVersion = stonecutter.current.isActive
+if (activeVersion) {
+    tasks.matching { it.name == 'stonecutterGenerate' || it.name == 'stonecutterGenerateTest' }.configureEach {
+        dependsOn(it.name == 'stonecutterGenerate' ? 'stonecutterMerge' : 'stonecutterMergeTest')
+    }
 }
 
-// The exclude reads the shared sources. Stonecutter's merge task writes those same folders, so each task
-// that reads them has to depend on the merge or Gradle rejects the implicit dependency.
 tasks.withType(SourceTask).configureEach { task ->
     if (task.name.startsWith('stonecutter')) return
     exclude(overridden)
-    dependsOn(task.name.toLowerCase().contains('test') ? 'stonecutterMergeTest' : 'stonecutterMerge')
+    if (activeVersion) {
+        dependsOn(task.name.toLowerCase().contains('test') ? 'stonecutterMergeTest' : 'stonecutterMerge')
+    }
 }
 tasks.withType(AbstractCopyTask).configureEach { task ->
     if (task.name.startsWith('stonecutter')) return
     exclude(overridden)
-    dependsOn(task.name.toLowerCase().contains('test') ? 'stonecutterMergeTest' : 'stonecutterMerge')
+    if (activeVersion) {
+        dependsOn(task.name.toLowerCase().contains('test') ? 'stonecutterMergeTest' : 'stonecutterMerge')
+    }
 }
 
 java {

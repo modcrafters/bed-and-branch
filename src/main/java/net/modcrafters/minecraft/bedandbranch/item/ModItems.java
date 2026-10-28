@@ -26,9 +26,9 @@ public final class ModItems {
     public static final Item PEAT = blockItem(ModBlocks.PEAT, PEAT_ID);
     public static final Item MUD = blockItem(ModBlocks.MUD, MUD_ID);
     public static final Item FARMLAND = blockItem(ModBlocks.FARMLAND, FARMLAND_ID);
-    public static final Item CROP_STICK = new CropStickItem(ModBlocks.CROP_STICK, new Item.Properties().setId(CROP_STICK_ID));
-    public static final Item TOMATO_SEEDS = new TomatoSeedsItem(new Item.Properties().setId(TOMATO_SEEDS_ID));
-    public static final Item TOMATO = new Item(new Item.Properties().setId(TOMATO_ID));
+    public static final Item CROP_STICK = new CropStickItem(ModBlocks.CROP_STICK, properties(CROP_STICK_ID));
+    public static final Item TOMATO_SEEDS = new TomatoSeedsItem(properties(TOMATO_SEEDS_ID));
+    public static final Item TOMATO = new Item(properties(TOMATO_ID));
 
     private ModItems() {
     }
@@ -59,8 +59,16 @@ public final class ModItems {
         return new ItemStack(TOMATO);
     }
 
+    // Items know their id from their properties since 1.21.2; before that the registry names them.
+    private static Item.Properties properties(ResourceKey<Item> id) {
+        //? if >=1.21.2 {
+        return new Item.Properties().setId(id);
+        //?} else
+        //return new Item.Properties();
+    }
+
     private static Item blockItem(Block block, ResourceKey<Item> id) {
-        return new BlockItem(block, new Item.Properties().setId(id));
+        return new BlockItem(block, properties(id));
     }
 
     private static ResourceKey<Item> itemId(String path) {

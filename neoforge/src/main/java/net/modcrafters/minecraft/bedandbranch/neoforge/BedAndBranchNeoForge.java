@@ -21,7 +21,10 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 public class BedAndBranchNeoForge {
     public BedAndBranchNeoForge(IEventBus modBus) {
         modBus.addListener(BedAndBranchNeoForge::registerContent);
+        //? if >=1.21.9 {
         if (FMLEnvironment.getDist() == Dist.CLIENT) {
+        //?} else
+        //if (FMLEnvironment.dist == Dist.CLIENT) {
             BedAndBranchNeoForgeClient.register(modBus);
         }
         BedAndBranch.init();

@@ -34,15 +34,15 @@ public final class MudFlooding {
             return Optional.empty();
         }
         if (stack.is(Items.WATER_BUCKET)) {
-            return fill(player, level, pos);
+            return fill(player, hand, level, pos);
         }
         if (stack.is(Items.BUCKET)) {
-            return empty(player, level, pos);
+            return empty(player, hand, level, pos);
         }
         return Optional.empty();
     }
 
-    private static Optional<InteractionResult> fill(Player player, Level level, BlockPos pos) {
+    private static Optional<InteractionResult> fill(Player player, InteractionHand hand, Level level, BlockPos pos) {
         BlockPos mudPos = mudPos(level, pos);
         if (mudPos == null || !level.mayInteract(player, mudPos)) {
             return Optional.empty();
@@ -56,13 +56,10 @@ public final class MudFlooding {
             level.setBlock(mudPos, flooded, Block.UPDATE_ALL);
             level.playSound(null, mudPos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
-        if (player.hasInfiniteMaterials()) {
-            return Optional.of(InteractionResult.SUCCESS);
-        }
-        return Optional.of(InteractionResult.SUCCESS.heldItemTransformedTo(new ItemStack(Items.BUCKET)));
+        return swapped(player, hand, level, new ItemStack(Items.BUCKET));
     }
 
-    private static Optional<InteractionResult> empty(Player player, Level level, BlockPos pos) {
+    private static Optional<InteractionResult> empty(Player player, InteractionHand hand, Level level, BlockPos pos) {
         BlockPos mudPos = floodedPos(level, pos);
         if (mudPos == null || !level.mayInteract(player, mudPos)) {
             return Optional.empty();
@@ -72,10 +69,19 @@ public final class MudFlooding {
             level.setBlock(mudPos, mud.setValue(MudBlock.WATERLOGGED, false), Block.UPDATE_ALL);
             level.playSound(null, mudPos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
+        return swapped(player, hand, level, new ItemStack(Items.WATER_BUCKET));
+    }
+
+    private static Optional<InteractionResult> swapped(Player player, InteractionHand hand, Level level, ItemStack replacement) {
         if (player.hasInfiniteMaterials()) {
             return Optional.of(InteractionResult.SUCCESS);
         }
-        return Optional.of(InteractionResult.SUCCESS.heldItemTransformedTo(new ItemStack(Items.WATER_BUCKET)));
+        //? if >=1.21.2 {
+        return Optional.of(InteractionResult.SUCCESS.heldItemTransformedTo(replacement));
+        //?} else {
+        /*player.setItemInHand(hand, replacement);
+        return Optional.of(InteractionResult.sidedSuccess(level.isClientSide()));
+        *///?}
     }
 
     private static BlockPos mudPos(Level level, BlockPos pos) {

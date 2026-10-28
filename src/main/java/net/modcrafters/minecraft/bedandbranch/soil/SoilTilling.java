@@ -6,7 +6,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -37,10 +39,16 @@ public final class SoilTilling {
         }
         if (!level.isClientSide()) {
             level.setBlock(pos, ModBlocks.FARMLAND.defaultBlockState().setValue(SoilState.PROPERTY, SoilState.of(kind)), Block.UPDATE_ALL);
+            //? if >=26.1 {
             level.playSound(null, pos, SoundEvents.HOE_TILL.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            //?} else
+            //level.playSound(null, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
             Player player = context.getPlayer();
             if (player != null && !player.hasInfiniteMaterials()) {
+                //? if >=1.21.5 {
                 context.getItemInHand().hurtAndBreak(1, player, context.getHand());
+                //?} else
+                //context.getItemInHand().hurtAndBreak(1, player, context.getHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
             }
         }
         return Optional.of(InteractionResult.SUCCESS);

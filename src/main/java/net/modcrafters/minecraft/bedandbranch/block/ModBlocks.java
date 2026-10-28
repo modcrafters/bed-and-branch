@@ -22,14 +22,7 @@ public final class ModBlocks {
     public static final Block LOAM = new Block(earth(LOAM_ID, SoundType.GRAVEL));
     public static final Block PEAT = new Block(earth(PEAT_ID, SoundType.ROOTED_DIRT));
     public static final MudBlock MUD = new MudBlock(earth(MUD_ID, SoundType.MUD));
-    public static final SoilFarmlandBlock FARMLAND = new SoilFarmlandBlock(BlockBehaviour.Properties.of()
-            .setId(FARMLAND_ID)
-            .strength(0.6F)
-            .sound(SoundType.GRAVEL)
-            .randomTicks()
-            // Looking at the block uses the picked item name, which includes the soil.
-            // A translation for this id would hide that name.
-            .overrideDescription("block.bed_and_branch.farmland.by_soil"));
+    public static final SoilFarmlandBlock FARMLAND = new SoilFarmlandBlock(farmland());
     public static final TomatoCropBlock TOMATO = new TomatoCropBlock(crop(TOMATO_ID).randomTicks());
     public static final CropStickBlock CROP_STICK = new CropStickBlock(crop(CROP_STICK_ID).randomTicks());
 
@@ -50,16 +43,39 @@ public final class ModBlocks {
     }
 
     private static BlockBehaviour.Properties earth(ResourceKey<Block> id, SoundType sound) {
-        return BlockBehaviour.Properties.of().setId(id).strength(0.5F).sound(sound);
+        return BlockBehaviour.Properties.of()
+                //? if >=1.21.2
+                .setId(id)
+                .strength(0.5F)
+                .sound(sound);
+    }
+
+    private static BlockBehaviour.Properties farmland() {
+        var properties = BlockBehaviour.Properties.of()
+                //? if >=1.21.2
+                .setId(FARMLAND_ID)
+                .strength(0.6F)
+                .sound(SoundType.GRAVEL)
+                .randomTicks();
+        // Looking at the block uses the picked item name, which includes the soil.
+        // A translation for this id would hide that name. 1.21.1 has no overrideDescription.
+        //? if >=1.21.2
+        properties = properties.overrideDescription("block.bed_and_branch.farmland.by_soil");
+        return properties;
     }
 
     private static BlockBehaviour.Properties crop(ResourceKey<Block> id) {
         return BlockBehaviour.Properties.of()
+                //? if >=1.21.2
                 .setId(id)
                 .instabreak()
                 .noCollision()
                 .noOcclusion()
                 .sound(SoundType.CROP)
+                // Pistons pop the stick. 1.21.1 has no POPPED, so the stick breaks instead.
+                //? if >=1.21.2
                 .pushReaction(PushReaction.POPPED);
+                //? if <1.21.2
+                //.pushReaction(PushReaction.DESTROY);
     }
 }

@@ -2,6 +2,8 @@ package net.modcrafters.minecraft.bedandbranch.block;
 
 import net.modcrafters.minecraft.bedandbranch.growth.Fertility;
 import net.modcrafters.minecraft.bedandbranch.item.SeedPlanting;
+//? if <1.21.2
+//import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -11,14 +13,20 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+//? if <1.21.2
+//import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
+//? if >=1.21.5
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.FarmlandBlock;
+//? if >=1.21.5
 import net.minecraft.world.level.block.VegetationBlock;
+//? if <1.21.5
+//import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -31,7 +39,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.ArrayList;
 import java.util.List;
 
+//? if >=1.21.5 {
 public class CropStickBlock extends VegetationBlock implements BonemealableBlock {
+//?} else {
+/*public class CropStickBlock extends BushBlock implements BonemealableBlock {
+*///?}
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 7);
 
     private static final VoxelShape SHAPE = Shapes.or(
@@ -43,6 +55,17 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
         super(properties);
         registerDefaultState(defaultBlockState().setValue(StickPlant.PROPERTY, StickPlant.NONE).setValue(AGE, 0));
     }
+
+    // BushBlock requires a codec through 1.21.1. VegetationBlock supplies it from 1.21.5.
+    //? if >=1.21.2 {
+    //?} else {
+    /*public static final MapCodec<CropStickBlock> CODEC = simpleCodec(CropStickBlock::new);
+
+    @Override
+    public MapCodec<CropStickBlock> codec() {
+        return CODEC;
+    }
+    *///?}
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
@@ -103,6 +126,7 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
         return InteractionResult.SUCCESS;
     }
 
+    //? if >=1.21.2 {
     @Override
     protected InteractionResult useItemOn(
             ItemStack stack,
@@ -113,6 +137,32 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
             InteractionHand hand,
             BlockHitResult hit
     ) {
+        InteractionResult handled = useStick(stack, state, level, pos, player);
+        if (handled != null) {
+            return handled;
+        }
+        return super.useItemOn(stack, state, level, pos, player, hand, hit);
+    }
+    //?} else {
+    /*@Override
+    protected ItemInteractionResult useItemOn(
+            ItemStack stack,
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            InteractionHand hand,
+            BlockHitResult hit
+    ) {
+        InteractionResult handled = useStick(stack, state, level, pos, player);
+        if (handled != null) {
+            return SeedPlanting.asItem(handled);
+        }
+        return super.useItemOn(stack, state, level, pos, player, hand, hit);
+    }
+    *///?}
+
+    private InteractionResult useStick(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player) {
         InteractionResult planted = SeedPlanting.tryPlant(level, player, stack, pos);
         if (planted.consumesAction()) {
             return planted;
@@ -121,13 +171,13 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
         if (harvested.consumesAction()) {
             return harvested;
         }
-        return super.useItemOn(stack, state, level, pos, player, hand, hit);
+        return null;
     }
 
+    //? if >=1.21.5 {
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
-        StickPlant plant = state.getValue(StickPlant.PROPERTY);
-        return plant != StickPlant.NONE && state.getValue(AGE) < plant.maxAge();
+        return canGrow(state);
     }
 
     @Override
@@ -137,6 +187,31 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
 
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
+        grow(level, random, pos, state);
+    }
+    //?} else {
+    /*@Override
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+        return canGrow(state);
+    }
+
+    @Override
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+        return true;
+    }
+
+    @Override
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+        grow(level, random, pos, state);
+    }
+    *///?}
+
+    private static boolean canGrow(BlockState state) {
+        StickPlant plant = state.getValue(StickPlant.PROPERTY);
+        return plant != StickPlant.NONE && state.getValue(AGE) < plant.maxAge();
+    }
+
+    private static void grow(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
         StickPlant plant = state.getValue(StickPlant.PROPERTY);
         int age = Math.min(plant.maxAge(), state.getValue(AGE) + 2 + random.nextInt(4));
         level.setBlock(pos, state.setValue(AGE, age), Block.UPDATE_CLIENTS);

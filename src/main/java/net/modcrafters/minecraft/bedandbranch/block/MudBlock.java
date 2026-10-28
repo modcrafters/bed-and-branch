@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
+//? if <1.21.6
+//import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -24,7 +26,10 @@ public class MudBlock extends Block implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public MudBlock(Properties properties) {
+        //? if >=1.21.2 {
         super(properties.overrideDescription("block.bed_and_branch.mud.by_state"));
+        //?} else
+        //super(properties);
         registerDefaultState(stateDefinition.any().setValue(WATERLOGGED, false));
     }
 
@@ -39,8 +44,19 @@ public class MudBlock extends Block implements SimpleWaterloggedBlock {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
+    //? if >=1.21.6 {
     @Override
     public boolean canPlaceLiquid(LivingEntity entity, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+        return acceptsWater(state, fluid);
+    }
+    //?} else {
+    /*@Override
+    public boolean canPlaceLiquid(Player player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+        return acceptsWater(state, fluid);
+    }
+    *///?}
+
+    private static boolean acceptsWater(BlockState state, Fluid fluid) {
         return fluid == Fluids.WATER && !state.getValue(WATERLOGGED);
     }
 
@@ -55,8 +71,19 @@ public class MudBlock extends Block implements SimpleWaterloggedBlock {
         return true;
     }
 
+    //? if >=1.21.6 {
     @Override
     public ItemStack pickupBlock(LivingEntity entity, LevelAccessor level, BlockPos pos, BlockState state) {
+        return takeWater(level, pos, state);
+    }
+    //?} else {
+    /*@Override
+    public ItemStack pickupBlock(Player player, LevelAccessor level, BlockPos pos, BlockState state) {
+        return takeWater(level, pos, state);
+    }
+    *///?}
+
+    private ItemStack takeWater(LevelAccessor level, BlockPos pos, BlockState state) {
         if (!state.getValue(WATERLOGGED)) {
             return ItemStack.EMPTY;
         }
@@ -64,8 +91,19 @@ public class MudBlock extends Block implements SimpleWaterloggedBlock {
         return new ItemStack(Items.WATER_BUCKET);
     }
 
+    //? if >=1.21.5 {
     @Override
     protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
+        return namedClone(state);
+    }
+    //?} else {
+    /*@Override
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+        return namedClone(state);
+    }
+    *///?}
+
+    private ItemStack namedClone(BlockState state) {
         ItemStack stack = new ItemStack(this);
         String name = state.getValue(WATERLOGGED) ? "block.bed_and_branch.mud.flooded" : "block.bed_and_branch.mud.dry";
         stack.set(DataComponents.ITEM_NAME, Component.translatable(name));
