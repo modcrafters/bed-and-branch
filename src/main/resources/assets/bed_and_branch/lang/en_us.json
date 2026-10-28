@@ -1,0 +1,22 @@
+{
+  "itemGroup.bed_and_branch": "Bed & Branch",
+  "config.jade.plugin_bed_and_branch.plant": "Soil",
+  "block.bed_and_branch.loam": "Loam",
+  "block.bed_and_branch.peat": "Peat",
+  "block.bed_and_branch.mud.dry": "Mud",
+  "block.bed_and_branch.mud.flooded": "Flooded Mud",
+  "block.bed_and_branch.farmland.sandy": "Sandy Tilled Soil",
+  "block.bed_and_branch.farmland.loam": "Loam Tilled Soil",
+  "block.bed_and_branch.farmland.peat": "Peat Tilled Soil",
+  "block.bed_and_branch.farmland.mud": "Muddy Tilled Soil",
+  "block.bed_and_branch.farmland.flooded_mud": "Flooded Mud Tilled Soil",
+  "block.bed_and_branch.tomato": "Tomato",
+  "block.bed_and_branch.crop_stick": "Crop Stick",
+  "item.bed_and_branch.loam": "Loam",
+  "item.bed_and_branch.peat": "Peat",
+  "item.bed_and_branch.mud": "Mud",
+  "item.bed_and_branch.farmland": "Tilled Soil",
+  "item.bed_and_branch.tomato": "Tomato",
+  "item.bed_and_branch.tomato_seeds": "Tomato Seeds",
+  "item.bed_and_branch.crop_stick": "Crop Stick"
+}

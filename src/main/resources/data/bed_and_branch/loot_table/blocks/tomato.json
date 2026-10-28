@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "bed_and_branch:tomato",
+                "state": { "age": "7" }
+              },
+              "name": "bed_and_branch:tomato"
+            },
+            { "type": "minecraft:item", "name": "bed_and_branch:tomato_seeds" }
+          ]
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "bed_and_branch:tomato",
+        "state": { "age": "7" }
+      },
+      "entries": [ { "type": "minecraft:item", "name": "bed_and_branch:tomato_seeds" } ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "bed_and_branch:tomato",
+        "state": { "staked": "true" }
+      },
+      "entries": [ { "type": "minecraft:item", "name": "bed_and_branch:crop_stick" } ],
+      "rolls": 1
+    }
+  ]
+}

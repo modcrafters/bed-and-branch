@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "waterlogged=false": { "model": "bed_and_branch:block/mud" },
+    "waterlogged=true": { "model": "bed_and_branch:block/mud_flooded" }
+  }
+}

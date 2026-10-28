@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": ["minecraft:dirt", "minecraft:dirt", "minecraft:clay_ball"],
+  "result": { "id": "bed_and_branch:loam" }
+}

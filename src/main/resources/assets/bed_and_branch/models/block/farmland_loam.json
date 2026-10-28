@@ -1,0 +1,8 @@
+{
+  "parent": "bed_and_branch:block/template_cube_bottom_top_indented",
+  "textures": {
+    "bottom": "bed_and_branch:block/loam",
+    "side": "bed_and_branch:block/loam",
+    "top": "bed_and_branch:block/farmland_loam"
+  }
+}

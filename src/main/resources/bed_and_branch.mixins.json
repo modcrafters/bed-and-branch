@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.modcrafters.minecraft.bedandbranch.mixin",
+  "compatibilityLevel": "JAVA_${java_version}",
+  "mixins": [
+    ${extra_mixins}"ContainedWaterMixin",
+    "HoeTillMixin",
+    "MudBucketMixin"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

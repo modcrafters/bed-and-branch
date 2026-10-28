@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": ["minecraft:dirt", "minecraft:moss_block"],
+  "result": { "id": "bed_and_branch:peat" }
+}
