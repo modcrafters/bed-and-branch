@@ -11,6 +11,7 @@ public final class ModTags {
     public static final TagKey<Block> SOILS_SANDY = block("soils/sandy");
     public static final TagKey<Block> SOILS_LOAM = block("soils/loam");
     public static final TagKey<Block> SOILS_PEAT = block("soils/peat");
+    public static final TagKey<Block> SOILS_MUD = block("soils/mud");
     public static final TagKey<Block> SOILS_FLOODED_MUD = block("soils/flooded_mud");
 
     private ModTags() {

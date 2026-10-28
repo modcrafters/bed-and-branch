@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/template_cube_bottom_top_indented",
   "textures": {
-    "bottom": "minecraft:block/moss_block",
-    "side": "minecraft:block/moss_block",
-    "top": "minecraft:block/farmland"
+    "bottom": "bed_and_branch:block/peat",
+    "side": "bed_and_branch:block/peat",
+    "top": "bed_and_branch:block/farmland_peat"
   }
 }

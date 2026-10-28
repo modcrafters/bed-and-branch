@@ -4,6 +4,7 @@ public enum SoilKind {
     SANDY("sandy", "sandy"),
     LOAM("loam", "loam"),
     PEAT("peat", "peat"),
+    MUD("mud", "mud"),
     FLOODED_MUD("flooded_mud", "flooded mud");
 
     private final String serialized;
@@ -20,5 +21,9 @@ public enum SoilKind {
 
     public String label() {
         return label;
+    }
+
+    public String farmlandNameKey() {
+        return "block.bed_and_branch.farmland." + serialized;
     }
 }

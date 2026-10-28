@@ -3,7 +3,7 @@
   "pools": [
     {
       "condition": { "type": "minecraft:survives_explosion" },
-      "entries": [ { "type": "minecraft:item", "name": "bed_and_branch:flooded_mud" } ],
+      "entries": [ { "type": "minecraft:item", "name": "bed_and_branch:mud" } ],
       "rolls": 1
     }
   ]

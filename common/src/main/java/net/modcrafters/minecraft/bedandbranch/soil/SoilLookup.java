@@ -1,5 +1,7 @@
 package net.modcrafters.minecraft.bedandbranch.soil;
 
+import net.modcrafters.minecraft.bedandbranch.block.ModBlocks;
+import net.modcrafters.minecraft.bedandbranch.block.MudBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
@@ -9,6 +11,9 @@ public final class SoilLookup {
     }
 
     public static Optional<SoilKind> kindOf(BlockState state) {
+        if (state.is(ModBlocks.MUD)) {
+            return Optional.of(SoilRules.withWater(SoilKind.MUD, state.getValue(MudBlock.WATERLOGGED)));
+        }
         if (state.is(ModTags.SOILS_SANDY)) {
             return Optional.of(SoilKind.SANDY);
         }
@@ -17,6 +22,9 @@ public final class SoilLookup {
         }
         if (state.is(ModTags.SOILS_PEAT)) {
             return Optional.of(SoilKind.PEAT);
+        }
+        if (state.is(ModTags.SOILS_MUD)) {
+            return Optional.of(SoilKind.MUD);
         }
         if (state.is(ModTags.SOILS_FLOODED_MUD)) {
             return Optional.of(SoilKind.FLOODED_MUD);

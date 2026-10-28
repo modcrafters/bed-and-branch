@@ -7,6 +7,7 @@ public enum SoilState implements StringRepresentable {
     SANDY(SoilKind.SANDY),
     LOAM(SoilKind.LOAM),
     PEAT(SoilKind.PEAT),
+    MUD(SoilKind.MUD),
     FLOODED_MUD(SoilKind.FLOODED_MUD);
 
     public static final EnumProperty<SoilState> PROPERTY = EnumProperty.create("soil", SoilState.class);

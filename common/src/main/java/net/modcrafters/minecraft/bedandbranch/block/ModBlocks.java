@@ -14,21 +14,24 @@ import java.util.function.BiConsumer;
 public final class ModBlocks {
     public static final ResourceKey<Block> LOAM_ID = blockId("loam");
     public static final ResourceKey<Block> PEAT_ID = blockId("peat");
-    public static final ResourceKey<Block> FLOODED_MUD_ID = blockId("flooded_mud");
+    public static final ResourceKey<Block> MUD_ID = blockId("mud");
     public static final ResourceKey<Block> FARMLAND_ID = blockId("farmland");
     public static final ResourceKey<Block> TOMATO_ID = blockId("tomato");
     public static final ResourceKey<Block> CROP_STICK_ID = blockId("crop_stick");
 
     public static final Block LOAM = new Block(earth(LOAM_ID, SoundType.GRAVEL));
     public static final Block PEAT = new Block(earth(PEAT_ID, SoundType.ROOTED_DIRT));
-    public static final FloodedMudBlock FLOODED_MUD = new FloodedMudBlock(earth(FLOODED_MUD_ID, SoundType.MUD));
+    public static final MudBlock MUD = new MudBlock(earth(MUD_ID, SoundType.MUD));
     public static final SoilFarmlandBlock FARMLAND = new SoilFarmlandBlock(BlockBehaviour.Properties.of()
             .setId(FARMLAND_ID)
             .strength(0.6F)
             .sound(SoundType.GRAVEL)
-            .randomTicks());
+            .randomTicks()
+            // Looking at the block uses the picked item name, which includes the soil.
+            // A translation for this id would hide that name.
+            .overrideDescription("block.bed_and_branch.farmland.by_soil"));
     public static final TomatoCropBlock TOMATO = new TomatoCropBlock(crop(TOMATO_ID).randomTicks());
-    public static final CropStickBlock CROP_STICK = new CropStickBlock(crop(CROP_STICK_ID));
+    public static final CropStickBlock CROP_STICK = new CropStickBlock(crop(CROP_STICK_ID).randomTicks());
 
     private ModBlocks() {
     }
@@ -36,7 +39,7 @@ public final class ModBlocks {
     public static void register(BiConsumer<Identifier, Block> out) {
         out.accept(LOAM_ID.identifier(), LOAM);
         out.accept(PEAT_ID.identifier(), PEAT);
-        out.accept(FLOODED_MUD_ID.identifier(), FLOODED_MUD);
+        out.accept(MUD_ID.identifier(), MUD);
         out.accept(FARMLAND_ID.identifier(), FARMLAND);
         out.accept(TOMATO_ID.identifier(), TOMATO);
         out.accept(CROP_STICK_ID.identifier(), CROP_STICK);

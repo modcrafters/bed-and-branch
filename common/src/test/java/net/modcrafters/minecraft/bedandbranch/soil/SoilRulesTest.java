@@ -18,13 +18,20 @@ class SoilRulesTest {
         assertEquals(Optional.of(SoilKind.SANDY), SoilRules.kindOf("minecraft:red_sand"));
         assertEquals(Optional.of(SoilKind.LOAM), SoilRules.kindOf("bed_and_branch:loam"));
         assertEquals(Optional.of(SoilKind.PEAT), SoilRules.kindOf("bed_and_branch:peat"));
-        assertEquals(Optional.of(SoilKind.FLOODED_MUD), SoilRules.kindOf("bed_and_branch:flooded_mud"));
+        assertEquals(Optional.of(SoilKind.MUD), SoilRules.kindOf("minecraft:mud"));
+        assertEquals(Optional.of(SoilKind.MUD), SoilRules.kindOf("bed_and_branch:mud"));
+    }
+
+    @Test
+    void waterTurnsMudIntoFloodedMud() {
+        assertEquals(SoilKind.MUD, SoilRules.withWater(SoilKind.MUD, false));
+        assertEquals(SoilKind.FLOODED_MUD, SoilRules.withWater(SoilKind.MUD, true));
+        assertEquals(SoilKind.LOAM, SoilRules.withWater(SoilKind.LOAM, true));
     }
 
     @Test
     void otherBlocksAreNotSoilBases() {
         assertEquals(Optional.empty(), SoilRules.kindOf("minecraft:dirt"));
-        assertEquals(Optional.empty(), SoilRules.kindOf("minecraft:mud"));
         assertEquals(Optional.empty(), SoilRules.kindOf("minecraft:farmland"));
         assertEquals(Optional.empty(), SoilRules.kindOf("minecraft:stone"));
     }
@@ -35,7 +42,8 @@ class SoilRulesTest {
         assertTrue(SoilRules.shouldTill("minecraft:dirt", "minecraft:red_sand"));
         assertTrue(SoilRules.shouldTill("minecraft:dirt", "bed_and_branch:loam"));
         assertTrue(SoilRules.shouldTill("minecraft:dirt", "bed_and_branch:peat"));
-        assertTrue(SoilRules.shouldTill("minecraft:dirt", "bed_and_branch:flooded_mud"));
+        assertTrue(SoilRules.shouldTill("minecraft:dirt", "minecraft:mud"));
+        assertTrue(SoilRules.shouldTill("minecraft:dirt", "bed_and_branch:mud"));
         assertFalse(SoilRules.shouldTill("minecraft:dirt", "minecraft:stone"));
         assertFalse(SoilRules.shouldTill("minecraft:dirt", "minecraft:dirt"));
         assertFalse(SoilRules.shouldTill("minecraft:grass_block", "bed_and_branch:loam"));
@@ -50,10 +58,21 @@ class SoilRulesTest {
     }
 
     @Test
+    void farmlandNamesNameTheSoil() throws IOException {
+        String lang = readResource("/assets/bed_and_branch/lang/en_us.json");
+        assertNamed(lang, SoilKind.SANDY, "Sandy Tilled Soil");
+        assertNamed(lang, SoilKind.LOAM, "Loam Tilled Soil");
+        assertNamed(lang, SoilKind.PEAT, "Peat Tilled Soil");
+        assertNamed(lang, SoilKind.MUD, "Muddy Tilled Soil");
+        assertNamed(lang, SoilKind.FLOODED_MUD, "Flooded Mud Tilled Soil");
+    }
+
+    @Test
     void tomatoAcceptsOnlyLoam() {
         assertTrue(SoilRules.tomatoAccepts(SoilKind.LOAM));
         assertFalse(SoilRules.tomatoAccepts(SoilKind.SANDY));
         assertFalse(SoilRules.tomatoAccepts(SoilKind.PEAT));
+        assertFalse(SoilRules.tomatoAccepts(SoilKind.MUD));
         assertFalse(SoilRules.tomatoAccepts(SoilKind.FLOODED_MUD));
     }
 
@@ -70,12 +89,18 @@ class SoilRulesTest {
         assertTag("soils/sandy", SoilKind.SANDY, "minecraft:sand", "minecraft:red_sand");
         assertTag("soils/loam", SoilKind.LOAM, "bed_and_branch:loam");
         assertTag("soils/peat", SoilKind.PEAT, "bed_and_branch:peat");
-        assertTag("soils/flooded_mud", SoilKind.FLOODED_MUD, "bed_and_branch:flooded_mud");
+        assertTag("soils/mud", SoilKind.MUD, "minecraft:mud", "bed_and_branch:mud");
+        String flooded = readTag("soils/flooded_mud");
+        assertTrue(flooded.contains("\"values\""));
+        assertFalse(flooded.contains("bed_and_branch:mud"));
         String bases = readTag("soil_bases");
         assertTrue(bases.contains("#bed_and_branch:soils/sandy"));
         assertTrue(bases.contains("#bed_and_branch:soils/loam"));
         assertTrue(bases.contains("#bed_and_branch:soils/peat"));
+        assertTrue(bases.contains("#bed_and_branch:soils/mud"));
         assertTrue(bases.contains("#bed_and_branch:soils/flooded_mud"));
+        String supportsCrops = readResource("/data/minecraft/tags/block/supports_crops.json");
+        assertTrue(supportsCrops.contains("\"bed_and_branch:farmland\""));
     }
 
     private static void assertTag(String path, SoilKind kind, String... ids) throws IOException {
@@ -86,8 +111,16 @@ class SoilRulesTest {
         }
     }
 
+    private static void assertNamed(String lang, SoilKind kind, String english) {
+        assertEquals("block.bed_and_branch.farmland." + kind.serializedName(), kind.farmlandNameKey());
+        assertTrue(lang.contains("\"" + kind.farmlandNameKey() + "\": \"" + english + "\""), kind.farmlandNameKey());
+    }
+
     private static String readTag(String path) throws IOException {
-        String resource = "/data/bed_and_branch/tags/block/" + path + ".json";
+        return readResource("/data/bed_and_branch/tags/block/" + path + ".json");
+    }
+
+    private static String readResource(String resource) throws IOException {
         try (InputStream in = SoilRulesTest.class.getResourceAsStream(resource)) {
             assertTrue(in != null, resource);
             return new String(in.readAllBytes(), StandardCharsets.UTF_8);

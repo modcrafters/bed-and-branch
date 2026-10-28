@@ -2,7 +2,7 @@
   "values": [
     "bed_and_branch:loam",
     "bed_and_branch:peat",
-    "bed_and_branch:flooded_mud",
+    "bed_and_branch:mud",
     "bed_and_branch:farmland"
   ]
 }

@@ -16,6 +16,14 @@
     "moisture=5,soil=loam": { "model": "bed_and_branch:block/farmland_loam" },
     "moisture=6,soil=loam": { "model": "bed_and_branch:block/farmland_loam" },
     "moisture=7,soil=loam": { "model": "bed_and_branch:block/farmland_loam_moist" },
+    "moisture=0,soil=mud": { "model": "bed_and_branch:block/farmland_mud" },
+    "moisture=1,soil=mud": { "model": "bed_and_branch:block/farmland_mud" },
+    "moisture=2,soil=mud": { "model": "bed_and_branch:block/farmland_mud" },
+    "moisture=3,soil=mud": { "model": "bed_and_branch:block/farmland_mud" },
+    "moisture=4,soil=mud": { "model": "bed_and_branch:block/farmland_mud" },
+    "moisture=5,soil=mud": { "model": "bed_and_branch:block/farmland_mud" },
+    "moisture=6,soil=mud": { "model": "bed_and_branch:block/farmland_mud" },
+    "moisture=7,soil=mud": { "model": "bed_and_branch:block/farmland_mud_moist" },
     "moisture=0,soil=peat": { "model": "bed_and_branch:block/farmland_peat" },
     "moisture=1,soil=peat": { "model": "bed_and_branch:block/farmland_peat" },
     "moisture=2,soil=peat": { "model": "bed_and_branch:block/farmland_peat" },
@@ -34,4 +42,3 @@
     "moisture=7,soil=sandy": { "model": "bed_and_branch:block/farmland_sandy_moist" }
   }
 }
-

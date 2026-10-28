@@ -14,9 +14,16 @@ public final class SoilRules {
             case "minecraft:sand", "minecraft:red_sand" -> Optional.of(SoilKind.SANDY);
             case "bed_and_branch:loam" -> Optional.of(SoilKind.LOAM);
             case "bed_and_branch:peat" -> Optional.of(SoilKind.PEAT);
-            case "bed_and_branch:flooded_mud" -> Optional.of(SoilKind.FLOODED_MUD);
+            case "minecraft:mud", "bed_and_branch:mud" -> Optional.of(SoilKind.MUD);
             default -> Optional.empty();
         };
+    }
+
+    public static SoilKind withWater(SoilKind kind, boolean waterlogged) {
+        if (kind == SoilKind.MUD && waterlogged) {
+            return SoilKind.FLOODED_MUD;
+        }
+        return kind;
     }
 
     public static boolean shouldTill(String targetId, String baseId) {

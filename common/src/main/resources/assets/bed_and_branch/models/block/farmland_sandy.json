@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "minecraft:block/sand",
     "side": "minecraft:block/sand",
-    "top": "minecraft:block/farmland"
+    "top": "bed_and_branch:block/farmland_sandy"
   }
 }
