@@ -18,7 +18,7 @@ public class BedAndBranchFabric implements ModInitializer {
         ModItems.register((id, item) -> Registry.register(BuiltInRegistries.ITEM, id, item));
         Registry.register(
                 BuiltInRegistries.CREATIVE_MODE_TAB,
-                ModTab.ID.identifier(),
+                ModTab.ID,
                 ModTab.titled(FabricCreativeModeTab.builder())
                         .displayItems((parameters, output) -> ModItems.tabContents().forEach(output::accept))
                         .build()

@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/template_cube_bottom_top_indented",
+  "parent": "bed_and_branch:block/template_cube_bottom_top_indented",
   "textures": {
     "bottom": "bed_and_branch:block/peat",
     "side": "bed_and_branch:block/peat",

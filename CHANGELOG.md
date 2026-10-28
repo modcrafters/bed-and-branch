@@ -6,6 +6,7 @@ To release, rename **Unreleased** to the version (for example `## 0.1.0`), use t
 
 ## Unreleased
 
+- On NeoForge 1.21.1, tilled soil, items, and plants show their textures. The soil and crop-stick recipes work, and an unripe tomato drops seeds.
 - NeoForge 1.21.1 is supported, as well as Fabric and NeoForge 26.3. The soil tooltip uses Jade on both. Jade's plugin code is still named Waila; the old Waila mod is not required.
 - Crop sticks stay planted. Seeds grow between the poles, harvesting takes the fruit, and breaking the stick drops the stick and the crop.
 - Tilled soil is named for the block under it: Sandy, Loam, Peat, Muddy, or Flooded Mud.
