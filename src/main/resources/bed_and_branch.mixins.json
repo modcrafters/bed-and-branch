@@ -2,9 +2,9 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.modcrafters.minecraft.bedandbranch.mixin",
-  "compatibilityLevel": "JAVA_25",
+  "compatibilityLevel": "JAVA_${java_version}",
   "mixins": [
-    "ContainedWaterMixin",
+    ${extra_mixins}"ContainedWaterMixin",
     "HoeTillMixin",
     "MudBucketMixin"
   ],
