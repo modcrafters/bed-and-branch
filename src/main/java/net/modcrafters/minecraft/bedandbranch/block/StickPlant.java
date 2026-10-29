@@ -5,10 +5,6 @@ import net.modcrafters.minecraft.bedandbranch.item.TomatoSeedsItem;
 import net.modcrafters.minecraft.bedandbranch.soil.SoilLookup;
 import net.modcrafters.minecraft.bedandbranch.soil.SoilRules;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -17,7 +13,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
@@ -29,8 +24,8 @@ public enum StickPlant implements StringRepresentable {
     WHEAT("wheat", Blocks.WHEAT, 7),
     CARROT("carrot", Blocks.CARROTS, 7),
     POTATO("potato", Blocks.POTATOES, 7),
-    BEETROOT("beetroot", Blocks.BEETROOTS, 3),
-    TORCHFLOWER("torchflower", Blocks.TORCHFLOWER_CROP, 1),
+    BEETROOT("beetroot", Blocks.BEETROOTS, 4),
+    TORCHFLOWER("torchflower", Blocks.TORCHFLOWER_CROP, 2),
     MELON("melon", Blocks.MELON_STEM, 7),
     PUMPKIN("pumpkin", Blocks.PUMPKIN_STEM, 7);
 
@@ -75,8 +70,12 @@ public enum StickPlant implements StringRepresentable {
                 return false;
             }
             BlockState below = level.getBlockState(pos.below());
-            if (!(below.getBlock() instanceof SoilFarmlandBlock)) {
+            if (!CropStickBlock.sitsOn(below)) {
                 return false;
+            }
+            // Vanilla farmland has no soil base, so the tomato grows without a soil requirement.
+            if (!(below.getBlock() instanceof SoilFarmlandBlock)) {
+                return true;
             }
             return SoilRules.tomatoSurvives(true, SoilLookup.kindOf(level.getBlockState(pos.below(2))).orElse(null));
         }
@@ -99,33 +98,16 @@ public enum StickPlant implements StringRepresentable {
 
     public Item fruit() {
         return switch (this) {
+            case NONE -> null;
             case WHEAT -> Items.WHEAT;
             case CARROT -> Items.CARROT;
             case POTATO -> Items.POTATO;
             case BEETROOT -> Items.BEETROOT;
             case TORCHFLOWER -> Items.TORCHFLOWER;
             case TOMATO -> ModItems.TOMATO;
-            default -> null;
+            case MELON -> Items.MELON;
+            case PUMPKIN -> Items.PUMPKIN;
         };
-    }
-
-    public void growFruit(ServerLevel level, BlockPos pos, RandomSource random) {
-        Block fruit = switch (this) {
-            case MELON -> Blocks.MELON;
-            case PUMPKIN -> Blocks.PUMPKIN;
-            default -> null;
-        };
-        if (fruit == null) {
-            return;
-        }
-        BlockPos fruitPos = pos.relative(Direction.Plane.HORIZONTAL.getRandomDirection(random));
-        BlockState ground = level.getBlockState(fruitPos.below());
-        if (!level.getBlockState(fruitPos).isAir()) {
-            return;
-        }
-        if (ground.getBlock() instanceof FarmlandBlock || ground.is(BlockTags.DIRT)) {
-            level.setBlock(fruitPos, fruit.defaultBlockState(), Block.UPDATE_ALL);
-        }
     }
 
     public void addBreakDrops(List<ItemStack> drops, int age) {

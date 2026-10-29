@@ -24,7 +24,7 @@ public final class ModBlocks {
     public static final MudBlock MUD = new MudBlock(earth(MUD_ID, SoundType.MUD));
     public static final SoilFarmlandBlock FARMLAND = new SoilFarmlandBlock(farmland());
     public static final TomatoCropBlock TOMATO = new TomatoCropBlock(crop(TOMATO_ID).randomTicks());
-    public static final CropStickBlock CROP_STICK = new CropStickBlock(crop(CROP_STICK_ID).randomTicks());
+    public static final CropStickBlock CROP_STICK = new CropStickBlock(crop(CROP_STICK_ID).randomTicks().lightLevel(CropStickBlock::lightEmission));
 
     private ModBlocks() {
     }

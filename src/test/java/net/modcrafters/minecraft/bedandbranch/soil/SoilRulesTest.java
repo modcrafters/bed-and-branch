@@ -85,6 +85,17 @@ class SoilRulesTest {
     }
 
     @Test
+    void wildTomatoSurvivesOnAnySoil() {
+        assertTrue(SoilRules.wildTomatoSurvives(true, SoilKind.LOAM));
+        assertTrue(SoilRules.wildTomatoSurvives(true, SoilKind.SANDY));
+        assertTrue(SoilRules.wildTomatoSurvives(true, SoilKind.PEAT));
+        assertTrue(SoilRules.wildTomatoSurvives(true, SoilKind.MUD));
+        assertTrue(SoilRules.wildTomatoSurvives(true, SoilKind.FLOODED_MUD));
+        assertFalse(SoilRules.wildTomatoSurvives(true, null));
+        assertFalse(SoilRules.wildTomatoSurvives(false, SoilKind.SANDY));
+    }
+
+    @Test
     void shippedTagsMatchTheBuiltInIds() throws IOException {
         assertTag("soils/sandy", SoilKind.SANDY, "minecraft:sand", "minecraft:red_sand");
         assertTag("soils/loam", SoilKind.LOAM, "bed_and_branch:loam");

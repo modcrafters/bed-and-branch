@@ -1,5 +1,5 @@
 {
-  "parent": "bed_and_branch:block/template_cube_bottom_top_indented",
+  "parent": "bed_and_branch:block/template_mud_farmland",
   "textures": {
     "bottom": "bed_and_branch:block/mud",
     "side": "bed_and_branch:block/mud",

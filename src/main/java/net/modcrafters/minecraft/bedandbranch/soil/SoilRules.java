@@ -41,4 +41,9 @@ public final class SoilRules {
     public static boolean tomatoSurvives(boolean onOurFarmland, SoilKind base) {
         return onOurFarmland && base != null && tomatoAccepts(base);
     }
+
+    /** Wild tomatoes take any soil under the tilled block. Stick tomatoes still want loam. */
+    public static boolean wildTomatoSurvives(boolean onOurFarmland, SoilKind base) {
+        return onOurFarmland && base != null;
+    }
 }

@@ -41,7 +41,9 @@ public final class PlantLookReader {
         boolean watered = farmland.hasProperty(FarmlandBlock.MOISTURE) && farmland.getValue(FarmlandBlock.MOISTURE) > 0;
         Growing growing = growing(plant);
         PlantLook.Suitability suitability = PlantLook.Suitability.UNSPECIFIED;
-        if (growing.tomato()) {
+        if (plant.getBlock() instanceof TomatoCropBlock) {
+            suitability = PlantLook.Suitability.SUITS;
+        } else if (growing.tomato()) {
             suitability = soil == SoilKind.LOAM ? PlantLook.Suitability.SUITS : PlantLook.Suitability.NEEDS_LOAM;
         }
         return new PlantLook(

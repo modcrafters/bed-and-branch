@@ -1,0 +1,213 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "bed_and_branch:block/gourd_leaf",
+    "stem": "bed_and_branch:block/gourd_stem",
+    "leaf": "bed_and_branch:block/gourd_leaf",
+    "melon": "minecraft:block/melon_side",
+    "melon_top": "minecraft:block/melon_top",
+    "pumpkin": "minecraft:block/pumpkin_side",
+    "pumpkin_top": "minecraft:block/pumpkin_top"
+  },
+  "elements": [
+    {
+      "from": [
+        7.5,
+        -1.0,
+        7.5
+      ],
+      "to": [
+        8.5,
+        2.0,
+        8.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            13.0,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0,
+            13.0,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0,
+            13.0,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0,
+            13.0,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0,
+            13.0,
+            1,
+            14.0
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "from": [
+        9.0,
+        -1.0,
+        6.5
+      ],
+      "to": [
+        10.0,
+        2.6,
+        7.5
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12.4,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0,
+            12.4,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0,
+            12.4,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0,
+            12.4,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0,
+            12.4,
+            1,
+            13.4
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "from": [
+        9.0,
+        1.2,
+        6.5
+      ],
+      "to": [
+        11.0,
+        1.7,
+        7.9
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            3,
+            2,
+            13
+          ],
+          "texture": "#leaf"
+        },
+        "down": {
+          "uv": [
+            0,
+            3,
+            2,
+            13
+          ],
+          "texture": "#leaf"
+        },
+        "north": {
+          "uv": [
+            0,
+            6,
+            2,
+            10
+          ],
+          "texture": "#leaf"
+        },
+        "south": {
+          "uv": [
+            0,
+            6,
+            2,
+            10
+          ],
+          "texture": "#leaf"
+        },
+        "west": {
+          "uv": [
+            6,
+            5,
+            10,
+            11
+          ],
+          "texture": "#leaf"
+        },
+        "east": {
+          "uv": [
+            6,
+            5,
+            10,
+            11
+          ],
+          "texture": "#leaf"
+        }
+      },
+      "rotation": {
+        "origin": [
+          9.0,
+          1.2,
+          6.5
+        ],
+        "axis": "z",
+        "angle": 22.5
+      }
+    }
+  ]
+}

@@ -21,6 +21,8 @@ public final class ModItems {
     public static final ResourceKey<Item> CROP_STICK_ID = itemId("crop_stick");
     public static final ResourceKey<Item> TOMATO_SEEDS_ID = itemId("tomato_seeds");
     public static final ResourceKey<Item> TOMATO_ID = itemId("tomato");
+    public static final ResourceKey<Item> DEBUG_STICK_NEXT_ID = itemId("debug_stick_next");
+    public static final ResourceKey<Item> DEBUG_STICK_PREVIOUS_ID = itemId("debug_stick_previous");
 
     public static final Item LOAM = blockItem(ModBlocks.LOAM, LOAM_ID);
     public static final Item PEAT = blockItem(ModBlocks.PEAT, PEAT_ID);
@@ -29,6 +31,8 @@ public final class ModItems {
     public static final Item CROP_STICK = new CropStickItem(ModBlocks.CROP_STICK, properties(CROP_STICK_ID));
     public static final Item TOMATO_SEEDS = new TomatoSeedsItem(properties(TOMATO_SEEDS_ID));
     public static final Item TOMATO = new Item(properties(TOMATO_ID));
+    public static final Item DEBUG_STICK_NEXT = new StageStickItem(1, properties(DEBUG_STICK_NEXT_ID));
+    public static final Item DEBUG_STICK_PREVIOUS = new StageStickItem(-1, properties(DEBUG_STICK_PREVIOUS_ID));
 
     private ModItems() {
     }
@@ -41,6 +45,8 @@ public final class ModItems {
         out.accept(CROP_STICK_ID.identifier(), CROP_STICK);
         out.accept(TOMATO_SEEDS_ID.identifier(), TOMATO_SEEDS);
         out.accept(TOMATO_ID.identifier(), TOMATO);
+        out.accept(DEBUG_STICK_NEXT_ID.identifier(), DEBUG_STICK_NEXT);
+        out.accept(DEBUG_STICK_PREVIOUS_ID.identifier(), DEBUG_STICK_PREVIOUS);
     }
 
     public static List<ItemStack> tabContents() {
@@ -51,7 +57,9 @@ public final class ModItems {
                 new ItemStack(FARMLAND),
                 new ItemStack(CROP_STICK),
                 new ItemStack(TOMATO_SEEDS),
-                new ItemStack(TOMATO)
+                new ItemStack(TOMATO),
+                new ItemStack(DEBUG_STICK_NEXT),
+                new ItemStack(DEBUG_STICK_PREVIOUS)
         );
     }
 

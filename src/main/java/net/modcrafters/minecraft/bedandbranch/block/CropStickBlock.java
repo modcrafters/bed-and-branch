@@ -47,13 +47,23 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 7);
 
     private static final VoxelShape SHAPE = Shapes.or(
-            Block.box(1.0, -1.0, 7.0, 3.0, 16.0, 9.0),
-            Block.box(13.0, -1.0, 7.0, 15.0, 16.0, 9.0)
+            Block.box(1.0, -1.0, 1.0, 2.0, 15.0, 2.0),
+            Block.box(14.0, -1.0, 1.0, 15.0, 15.0, 2.0),
+            Block.box(1.0, -1.0, 14.0, 2.0, 15.0, 15.0),
+            Block.box(14.0, -1.0, 14.0, 15.0, 15.0, 15.0)
     );
 
     public CropStickBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(StickPlant.PROPERTY, StickPlant.NONE).setValue(AGE, 0));
+    }
+
+    /** Open torchflowers shine. Younger stages and every other plant stay dark. */
+    public static int lightEmission(BlockState state) {
+        if (state.getValue(StickPlant.PROPERTY) != StickPlant.TORCHFLOWER) {
+            return 0;
+        }
+        return state.getValue(AGE) >= StickPlant.TORCHFLOWER.maxAge() ? 12 : 0;
     }
 
     // BushBlock requires a codec through 1.21.1. VegetationBlock supplies it from 1.21.5.
@@ -67,9 +77,13 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
     }
     *///?}
 
+    public static boolean sitsOn(BlockState state) {
+        return state.getBlock() instanceof FarmlandBlock;
+    }
+
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
-        return state.getBlock() instanceof SoilFarmlandBlock;
+        return sitsOn(state);
     }
 
     @Override
@@ -97,10 +111,13 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
         }
         int age = state.getValue(AGE);
         if (age >= plant.maxAge()) {
-            plant.growFruit(level, pos, random);
             return;
         }
         if (level.getRawBrightness(pos, 0) < 9) {
+            return;
+        }
+        // Beets and torchflowers skip one growth roll in three, the same as their vanilla crops.
+        if ((plant == StickPlant.BEETROOT || plant == StickPlant.TORCHFLOWER) && random.nextInt(3) == 0) {
             return;
         }
         float speed = growthSpeed(level, pos);
@@ -108,6 +125,22 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
             return;
         }
         level.setBlock(pos, state.setValue(AGE, age + 1), Block.UPDATE_CLIENTS);
+    }
+
+    public static InteractionResult usePlantedStick(ItemStack stack, Level level, BlockPos pos, Player player) {
+        BlockState crop = level.getBlockState(pos);
+        if (!crop.is(ModBlocks.CROP_STICK)) {
+            return null;
+        }
+        InteractionResult planted = SeedPlanting.tryPlant(level, player, stack, pos);
+        if (planted.consumesAction()) {
+            return planted;
+        }
+        InteractionResult harvested = harvest(level, pos, crop);
+        if (harvested.consumesAction()) {
+            return harvested;
+        }
+        return null;
     }
 
     public static InteractionResult harvest(Level level, BlockPos pos, BlockState state) {

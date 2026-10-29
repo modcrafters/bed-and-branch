@@ -6,7 +6,8 @@
   "mixins": [
     ${extra_mixins}"ContainedWaterMixin",
     "HoeTillMixin",
-    "MudBucketMixin"
+    "MudBucketMixin",
+    "FarmlandStickMixin"
   ],
   "client": [],
   "server": [],

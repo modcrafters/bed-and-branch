@@ -1,0 +1,6 @@
+{
+  "parent": "bed_and_branch:block/tomato_wild_cross",
+  "textures": {
+    "crop": "bed_and_branch:block/tomato_wild_3"
+  }
+}
