@@ -2,7 +2,6 @@ package net.modcrafters.minecraft.bedandbranch.item;
 
 import net.modcrafters.minecraft.bedandbranch.block.CropStickBlock;
 import net.modcrafters.minecraft.bedandbranch.block.ModBlocks;
-import net.modcrafters.minecraft.bedandbranch.block.SoilFarmlandBlock;
 import net.modcrafters.minecraft.bedandbranch.block.StickPlant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -24,7 +23,7 @@ public final class SeedPlanting {
     }
 
     public static InteractionResult tryPlant(Level level, Player player, ItemStack stack, BlockPos pos) {
-        if (!(level.getBlockState(pos.below()).getBlock() instanceof SoilFarmlandBlock)) {
+        if (!CropStickBlock.sitsOn(level.getBlockState(pos.below()))) {
             return InteractionResult.PASS;
         }
         BlockState existing = level.getBlockState(pos);
@@ -40,6 +39,7 @@ public final class SeedPlanting {
         }
         if (!level.isClientSide()) {
             level.setBlock(pos, crop, Block.UPDATE_ALL);
+            level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0F, 1.0F);
             if (player == null || !player.hasInfiniteMaterials()) {
                 stack.shrink(1);
             }

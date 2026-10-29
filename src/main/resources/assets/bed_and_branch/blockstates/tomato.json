@@ -1,21 +1,21 @@
 {
   "multipart": [
-  { "when": { "staked": "false", "age": "0" }, "apply": { "model": "minecraft:block/wheat_stage0" } },
-  { "when": { "staked": "false", "age": "1" }, "apply": { "model": "minecraft:block/wheat_stage1" } },
-  { "when": { "staked": "false", "age": "2" }, "apply": { "model": "minecraft:block/wheat_stage2" } },
-  { "when": { "staked": "false", "age": "3" }, "apply": { "model": "minecraft:block/wheat_stage3" } },
-  { "when": { "staked": "false", "age": "4" }, "apply": { "model": "minecraft:block/wheat_stage4" } },
-  { "when": { "staked": "false", "age": "5" }, "apply": { "model": "minecraft:block/wheat_stage5" } },
-  { "when": { "staked": "false", "age": "6" }, "apply": { "model": "minecraft:block/wheat_stage6" } },
-  { "when": { "staked": "false", "age": "7" }, "apply": { "model": "minecraft:block/wheat_stage7" } },
+  { "when": { "staked": "false", "age": "0" }, "apply": { "model": "bed_and_branch:block/tomato_wild_0" } },
+  { "when": { "staked": "false", "age": "1" }, "apply": { "model": "bed_and_branch:block/tomato_wild_1" } },
+  { "when": { "staked": "false", "age": "2" }, "apply": { "model": "bed_and_branch:block/tomato_wild_2" } },
+  { "when": { "staked": "false", "age": "3" }, "apply": { "model": "bed_and_branch:block/tomato_wild_3" } },
+  { "when": { "staked": "false", "age": "4" }, "apply": { "model": "bed_and_branch:block/tomato_wild_4" } },
+  { "when": { "staked": "false", "age": "5" }, "apply": { "model": "bed_and_branch:block/tomato_wild_5" } },
+  { "when": { "staked": "false", "age": "6" }, "apply": { "model": "bed_and_branch:block/tomato_wild_6" } },
+  { "when": { "staked": "false", "age": "7" }, "apply": { "model": "bed_and_branch:block/tomato_wild_7" } },
   { "when": { "staked": "true" }, "apply": { "model": "bed_and_branch:block/crop_stick" } },
-  { "when": { "staked": "true", "age": "0" }, "apply": { "model": "minecraft:block/wheat_stage0" } },
-  { "when": { "staked": "true", "age": "1" }, "apply": { "model": "minecraft:block/wheat_stage1" } },
-  { "when": { "staked": "true", "age": "2" }, "apply": { "model": "minecraft:block/wheat_stage2" } },
-  { "when": { "staked": "true", "age": "3" }, "apply": { "model": "minecraft:block/wheat_stage3" } },
-  { "when": { "staked": "true", "age": "4" }, "apply": { "model": "minecraft:block/wheat_stage4" } },
-  { "when": { "staked": "true", "age": "5" }, "apply": { "model": "minecraft:block/wheat_stage5" } },
-  { "when": { "staked": "true", "age": "6" }, "apply": { "model": "minecraft:block/wheat_stage6" } },
-  { "when": { "staked": "true", "age": "7" }, "apply": { "model": "minecraft:block/wheat_stage7" } }
+  { "when": { "staked": "true", "age": "0" }, "apply": { "model": "bed_and_branch:block/tomato_staked_0" } },
+  { "when": { "staked": "true", "age": "1" }, "apply": { "model": "bed_and_branch:block/tomato_staked_1" } },
+  { "when": { "staked": "true", "age": "2" }, "apply": { "model": "bed_and_branch:block/tomato_staked_2" } },
+  { "when": { "staked": "true", "age": "3" }, "apply": { "model": "bed_and_branch:block/tomato_staked_3" } },
+  { "when": { "staked": "true", "age": "4" }, "apply": { "model": "bed_and_branch:block/tomato_staked_4" } },
+  { "when": { "staked": "true", "age": "5" }, "apply": { "model": "bed_and_branch:block/tomato_staked_5" } },
+  { "when": { "staked": "true", "age": "6" }, "apply": { "model": "bed_and_branch:block/tomato_staked_6" } },
+  { "when": { "staked": "true", "age": "7" }, "apply": { "model": "bed_and_branch:block/tomato_staked_7" } }
   ]
 }

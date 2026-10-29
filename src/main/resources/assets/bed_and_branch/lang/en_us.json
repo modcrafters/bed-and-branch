@@ -10,7 +10,7 @@
   "block.bed_and_branch.farmland.peat": "Peat Tilled Soil",
   "block.bed_and_branch.farmland.mud": "Muddy Tilled Soil",
   "block.bed_and_branch.farmland.flooded_mud": "Flooded Mud Tilled Soil",
-  "block.bed_and_branch.tomato": "Tomato",
+  "block.bed_and_branch.tomato": "Wild Tomatoes",
   "block.bed_and_branch.crop_stick": "Crop Stick",
   "item.bed_and_branch.loam": "Loam",
   "item.bed_and_branch.peat": "Peat",
@@ -18,5 +18,7 @@
   "item.bed_and_branch.farmland": "Tilled Soil",
   "item.bed_and_branch.tomato": "Tomato",
   "item.bed_and_branch.tomato_seeds": "Tomato Seeds",
-  "item.bed_and_branch.crop_stick": "Crop Stick"
+  "item.bed_and_branch.crop_stick": "Crop Stick",
+  "item.bed_and_branch.debug_stick_next": "Debug Stick (+1)",
+  "item.bed_and_branch.debug_stick_previous": "Debug Stick (-1)"
 }

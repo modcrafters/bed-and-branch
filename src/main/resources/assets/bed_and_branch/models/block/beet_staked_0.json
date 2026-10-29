@@ -1,0 +1,221 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "bed_and_branch:block/beet_leaf",
+    "stem": "bed_and_branch:block/beet_stem",
+    "stem_wither": "bed_and_branch:block/beet_stem_wither",
+    "stem_dead": "bed_and_branch:block/beet_stem_dead",
+    "leaf": "bed_and_branch:block/beet_leaf",
+    "wither": "bed_and_branch:block/beet_leaf_wither",
+    "dead": "bed_and_branch:block/beet_leaf_dead",
+    "root": "bed_and_branch:block/beet_root",
+    "young": "bed_and_branch:block/beet_root_young"
+  },
+  "elements": [
+    {
+      "from": [
+        7.0,
+        -1.0,
+        6.0
+      ],
+      "to": [
+        8.0,
+        2.0,
+        7.0
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            13,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0,
+            13,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0,
+            13,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0,
+            13,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0,
+            13,
+            1,
+            14
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "from": [
+        7.0,
+        1.0,
+        5.75
+      ],
+      "to": [
+        9.0,
+        1.5,
+        7.25
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            3,
+            2,
+            13
+          ],
+          "texture": "#leaf"
+        },
+        "down": {
+          "uv": [
+            0,
+            3,
+            2,
+            13
+          ],
+          "texture": "#leaf"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8.0,
+          1.0,
+          6.0
+        ],
+        "axis": "z",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        8.0,
+        -1.0,
+        9.0
+      ],
+      "to": [
+        9.0,
+        3.0,
+        10.0
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            12,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            0,
+            12,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            0,
+            12,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            0,
+            12,
+            1,
+            16
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            0,
+            12,
+            1,
+            13
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "from": [
+        7.75,
+        2.0,
+        8.0
+      ],
+      "to": [
+        9.25,
+        2.5,
+        10.0
+      ],
+      "shade": false,
+      "faces": {
+        "up": {
+          "uv": [
+            3,
+            0,
+            13,
+            2
+          ],
+          "texture": "#leaf"
+        },
+        "down": {
+          "uv": [
+            3,
+            0,
+            13,
+            2
+          ],
+          "texture": "#leaf"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8.0,
+          2.0,
+          9.0
+        ],
+        "axis": "x",
+        "angle": 22.5
+      }
+    }
+  ]
+}

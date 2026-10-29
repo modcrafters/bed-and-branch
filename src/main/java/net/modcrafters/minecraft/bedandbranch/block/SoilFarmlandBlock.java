@@ -141,20 +141,7 @@ public class SoilFarmlandBlock extends FarmlandBlock {
     *///?}
 
     private InteractionResult useSoil(ItemStack stack, Level level, BlockPos pos, Player player) {
-        BlockPos above = pos.above();
-        BlockState crop = level.getBlockState(above);
-        if (!crop.is(ModBlocks.CROP_STICK)) {
-            return null;
-        }
-        InteractionResult planted = SeedPlanting.tryPlant(level, player, stack, above);
-        if (planted.consumesAction()) {
-            return planted;
-        }
-        InteractionResult harvested = CropStickBlock.harvest(level, above, crop);
-        if (harvested.consumesAction()) {
-            return harvested;
-        }
-        return null;
+        return CropStickBlock.usePlantedStick(stack, level, pos.above(), player);
     }
 
     @Override
