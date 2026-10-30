@@ -1,0 +1,121 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "bed_and_branch:block/berry_obelisk"
+      }
+    },
+    {
+      "when": {
+        "age": "1",
+        "part": "base"
+      },
+      "apply": {
+        "model": "bed_and_branch:block/obelisk_sweet_base_1"
+      }
+    },
+    {
+      "when": {
+        "age": "2",
+        "part": "base"
+      },
+      "apply": {
+        "model": "bed_and_branch:block/obelisk_sweet_base_2"
+      }
+    },
+    {
+      "when": {
+        "age": "3",
+        "part": "base"
+      },
+      "apply": {
+        "model": "bed_and_branch:block/obelisk_sweet_base_3"
+      }
+    },
+    {
+      "when": {
+        "age": "4",
+        "part": "base"
+      },
+      "apply": {
+        "model": "bed_and_branch:block/obelisk_sweet_base_4"
+      }
+    },
+    {
+      "when": {
+        "age": "1",
+        "part": "top"
+      },
+      "apply": {
+        "model": "bed_and_branch:block/obelisk_sweet_top_1"
+      }
+    },
+    {
+      "when": {
+        "age": "2",
+        "part": "top"
+      },
+      "apply": {
+        "model": "bed_and_branch:block/obelisk_sweet_top_2"
+      }
+    },
+    {
+      "when": {
+        "age": "3",
+        "part": "top"
+      },
+      "apply": {
+        "model": "bed_and_branch:block/obelisk_sweet_top_3"
+      }
+    },
+    {
+      "when": {
+        "age": "4",
+        "part": "top"
+      },
+      "apply": {
+        "model": "bed_and_branch:block/obelisk_sweet_top_4"
+      }
+    },
+    {
+      "when": {
+        "age": "4",
+        "fruit": "1",
+        "part": "base"
+      },
+      "apply": {
+        "model": "bed_and_branch:block/obelisk_sweet_fruit_1"
+      }
+    },
+    {
+      "when": {
+        "age": "4",
+        "fruit": "2",
+        "part": "base"
+      },
+      "apply": {
+        "model": "bed_and_branch:block/obelisk_sweet_fruit_2"
+      }
+    },
+    {
+      "when": {
+        "age": "4",
+        "fruit": "1",
+        "part": "top"
+      },
+      "apply": {
+        "model": "bed_and_branch:block/obelisk_sweet_fruit_1"
+      }
+    },
+    {
+      "when": {
+        "age": "4",
+        "fruit": "2",
+        "part": "top"
+      },
+      "apply": {
+        "model": "bed_and_branch:block/obelisk_sweet_fruit_2"
+      }
+    }
+  ]
+}

@@ -30,6 +30,9 @@ public final class SoilTilling {
         BlockPos pos = context.getClickedPos();
         BlockState target = level.getBlockState(pos);
         BlockState base = level.getBlockState(pos.below());
+        if (target.is(Blocks.NETHERRACK) && base.is(Blocks.SOUL_SAND)) {
+            return tillNether(context, level, pos);
+        }
         if (!target.is(Blocks.DIRT)) {
             return Optional.empty();
         }
@@ -39,6 +42,27 @@ public final class SoilTilling {
         }
         if (!level.isClientSide()) {
             level.setBlock(pos, ModBlocks.FARMLAND.defaultBlockState().setValue(SoilState.PROPERTY, SoilState.of(kind)), Block.UPDATE_ALL);
+            //? if >=26.1 {
+            level.playSound(null, pos, SoundEvents.HOE_TILL.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            //?} else
+            //level.playSound(null, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+            Player player = context.getPlayer();
+            if (player != null && !player.hasInfiniteMaterials()) {
+                //? if >=1.21.5 {
+                context.getItemInHand().hurtAndBreak(1, player, context.getHand());
+                //?} else
+                //context.getItemInHand().hurtAndBreak(1, player, context.getHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+            }
+        }
+        return Optional.of(InteractionResult.SUCCESS);
+    }
+
+    private static Optional<InteractionResult> tillNether(UseOnContext context, Level level, BlockPos pos) {
+        if (!level.getBlockState(pos.above()).isAir()) {
+            return Optional.empty();
+        }
+        if (!level.isClientSide()) {
+            level.setBlock(pos, ModBlocks.NETHER_FARMLAND.defaultBlockState(), Block.UPDATE_ALL);
             //? if >=26.1 {
             level.playSound(null, pos, SoundEvents.HOE_TILL.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
             //?} else

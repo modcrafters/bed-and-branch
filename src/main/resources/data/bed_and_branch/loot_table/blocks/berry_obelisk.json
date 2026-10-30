@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": { "type": "minecraft:survives_explosion" },
+      "entries": [ { "type": "minecraft:item", "name": "bed_and_branch:berry_obelisk" } ],
+      "rolls": 1
+    }
+  ]
+}

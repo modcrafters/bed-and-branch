@@ -11,5 +11,6 @@ public class BedAndBranchFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         BlockColorRegistry.register(List.of(BlockTintSources.water()), ModBlocks.FARMLAND);
+        BlockColorRegistry.register(List.of(BlockTintSources.foliage()), ModBlocks.VINE_TRELLIS);
     }
 }

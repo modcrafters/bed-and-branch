@@ -18,7 +18,10 @@ public final class ModItems {
     public static final ResourceKey<Item> PEAT_ID = itemId("peat");
     public static final ResourceKey<Item> MUD_ID = itemId("mud");
     public static final ResourceKey<Item> FARMLAND_ID = itemId("farmland");
+    public static final ResourceKey<Item> NETHER_FARMLAND_ID = itemId("nether_farmland");
     public static final ResourceKey<Item> CROP_STICK_ID = itemId("crop_stick");
+    public static final ResourceKey<Item> BERRY_OBELISK_ID = itemId("berry_obelisk");
+    public static final ResourceKey<Item> VINE_TRELLIS_ID = itemId("vine_trellis");
     public static final ResourceKey<Item> TOMATO_SEEDS_ID = itemId("tomato_seeds");
     public static final ResourceKey<Item> TOMATO_ID = itemId("tomato");
     public static final ResourceKey<Item> DEBUG_STICK_NEXT_ID = itemId("debug_stick_next");
@@ -28,7 +31,10 @@ public final class ModItems {
     public static final Item PEAT = blockItem(ModBlocks.PEAT, PEAT_ID);
     public static final Item MUD = blockItem(ModBlocks.MUD, MUD_ID);
     public static final Item FARMLAND = blockItem(ModBlocks.FARMLAND, FARMLAND_ID);
+    public static final Item NETHER_FARMLAND = blockItem(ModBlocks.NETHER_FARMLAND, NETHER_FARMLAND_ID);
     public static final Item CROP_STICK = new CropStickItem(ModBlocks.CROP_STICK, properties(CROP_STICK_ID));
+    public static final Item BERRY_OBELISK = new GardenSupportItem(ModBlocks.BERRY_OBELISK, properties(BERRY_OBELISK_ID));
+    public static final Item VINE_TRELLIS = new GardenSupportItem(ModBlocks.VINE_TRELLIS, properties(VINE_TRELLIS_ID));
     public static final Item TOMATO_SEEDS = new TomatoSeedsItem(properties(TOMATO_SEEDS_ID));
     public static final Item TOMATO = new Item(properties(TOMATO_ID));
     public static final Item DEBUG_STICK_NEXT = new StageStickItem(1, properties(DEBUG_STICK_NEXT_ID));
@@ -42,7 +48,10 @@ public final class ModItems {
         out.accept(PEAT_ID.identifier(), PEAT);
         out.accept(MUD_ID.identifier(), MUD);
         out.accept(FARMLAND_ID.identifier(), FARMLAND);
+        out.accept(NETHER_FARMLAND_ID.identifier(), NETHER_FARMLAND);
         out.accept(CROP_STICK_ID.identifier(), CROP_STICK);
+        out.accept(BERRY_OBELISK_ID.identifier(), BERRY_OBELISK);
+        out.accept(VINE_TRELLIS_ID.identifier(), VINE_TRELLIS);
         out.accept(TOMATO_SEEDS_ID.identifier(), TOMATO_SEEDS);
         out.accept(TOMATO_ID.identifier(), TOMATO);
         out.accept(DEBUG_STICK_NEXT_ID.identifier(), DEBUG_STICK_NEXT);
@@ -55,7 +64,10 @@ public final class ModItems {
                 new ItemStack(PEAT),
                 new ItemStack(MUD),
                 new ItemStack(FARMLAND),
+                new ItemStack(NETHER_FARMLAND),
                 new ItemStack(CROP_STICK),
+                new ItemStack(BERRY_OBELISK),
+                new ItemStack(VINE_TRELLIS),
                 new ItemStack(TOMATO_SEEDS),
                 new ItemStack(TOMATO),
                 new ItemStack(DEBUG_STICK_NEXT),

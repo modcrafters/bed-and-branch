@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "moisture=0": { "model": "bed_and_branch:block/nether_farmland" },
+    "moisture=1": { "model": "bed_and_branch:block/nether_farmland" },
+    "moisture=2": { "model": "bed_and_branch:block/nether_farmland" },
+    "moisture=3": { "model": "bed_and_branch:block/nether_farmland" },
+    "moisture=4": { "model": "bed_and_branch:block/nether_farmland" },
+    "moisture=5": { "model": "bed_and_branch:block/nether_farmland" },
+    "moisture=6": { "model": "bed_and_branch:block/nether_farmland" },
+    "moisture=7": { "model": "bed_and_branch:block/nether_farmland_moist" }
+  }
+}
