@@ -6,6 +6,11 @@ To release, rename **Unreleased** to the version (for example `## 0.1.0`), use t
 
 ## Unreleased
 
+- Berry obelisks are wooden cages. Two can be stacked, and the first sits on farmland. Sweet berries grow inside as a branched bush. A full bush keeps growing into the cage above, and the berries show through the openings. Picking takes only the ripe berries. The bush stays and fruits again.
+- Vine trellises are wooden screens. Three can be stacked. A vine planted on any piece of a stack grows from the bottom and climbs to the top. A full ground trellis can spread to an empty ground trellis beside it. Picking takes the vines from the one you clicked and every trellis above it. The bottom keeps a short vine. The ones above go bare.
+- Nether farmland is hoed netherrack on soul sand. Lava nearby fertilizes it. Weeping vines grow on a trellis there, and only while it stays fertilized. They do not need daylight. Ordinary vines will not grow on it.
+- The forward debug stick no longer harvests a finished plant. On a finished vine it starts the empty trellis above. On a full berry bush it starts the empty cage above, or sets the next berries.
+
 - Crop sticks are four corner poles. A click on the soil between them still uses the stick, and sticks work on vanilla farmland as well as tilled soil.
 - Plants on a stick grow as 3D models: wheat, carrots, potatoes, beets, melons, pumpkins, torchflowers, and tomatoes. Off a stick, the vanilla crops stay as they are.
 - Beets on a stick have five stages. The last two wither the leaves while the root shows, and each stage takes a little longer than wheat.

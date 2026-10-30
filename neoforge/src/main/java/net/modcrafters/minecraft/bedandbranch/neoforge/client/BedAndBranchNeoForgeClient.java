@@ -29,6 +29,7 @@ public final class BedAndBranchNeoForgeClient {
     //? if >=26.1 {
     private static void trenchWaterColor(RegisterColorHandlersEvent.BlockTintSources event) {
         event.register(List.of(BlockTintSources.water()), ModBlocks.FARMLAND);
+        event.register(List.of(BlockTintSources.foliage()), ModBlocks.VINE_TRELLIS);
     }
     //?} else {
     /*private static void trenchWaterColor(RegisterColorHandlersEvent.Block event) {
@@ -38,6 +39,12 @@ public final class BedAndBranchNeoForgeClient {
             }
             return BiomeColors.getAverageWaterColor(level, pos);
         }, ModBlocks.FARMLAND);
+        event.register((state, level, pos, tintIndex) -> {
+            if (level == null || pos == null) {
+                return 0x48B518;
+            }
+            return BiomeColors.getAverageFoliageColor(level, pos);
+        }, ModBlocks.VINE_TRELLIS);
     }
     *///?}
 
@@ -47,6 +54,8 @@ public final class BedAndBranchNeoForgeClient {
         event.enqueueWork(() -> {
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.TOMATO, RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.CROP_STICK, RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.VINE_TRELLIS, RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.BERRY_OBELISK, RenderType.cutout());
         });
     }
     *///?}

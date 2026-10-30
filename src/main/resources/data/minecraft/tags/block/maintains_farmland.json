@@ -1,7 +1,9 @@
 {
   "values": [
     "bed_and_branch:tomato",
-    "bed_and_branch:crop_stick"
+    "bed_and_branch:crop_stick",
+    "bed_and_branch:berry_obelisk",
+    "bed_and_branch:vine_trellis"
   ]
 }
 

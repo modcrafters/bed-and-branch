@@ -2,6 +2,7 @@ package net.modcrafters.minecraft.bedandbranch.block;
 
 import net.modcrafters.minecraft.bedandbranch.growth.Fertility;
 import net.modcrafters.minecraft.bedandbranch.item.SeedPlanting;
+import net.modcrafters.minecraft.bedandbranch.item.StageStickItem;
 //? if <1.21.2
 //import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
@@ -136,6 +137,12 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
         if (planted.consumesAction()) {
             return planted;
         }
+        if (stack.getItem() instanceof StageStickItem) {
+            return null;
+        }
+        if (StageStickItem.heldBy(player)) {
+            return InteractionResult.CONSUME;
+        }
         InteractionResult harvested = harvest(level, pos, crop);
         if (harvested.consumesAction()) {
             return harvested;
@@ -199,6 +206,12 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
         InteractionResult planted = SeedPlanting.tryPlant(level, player, stack, pos);
         if (planted.consumesAction()) {
             return planted;
+        }
+        if (stack.getItem() instanceof StageStickItem) {
+            return null;
+        }
+        if (StageStickItem.heldBy(player)) {
+            return InteractionResult.CONSUME;
         }
         InteractionResult harvested = harvest(level, pos, state);
         if (harvested.consumesAction()) {

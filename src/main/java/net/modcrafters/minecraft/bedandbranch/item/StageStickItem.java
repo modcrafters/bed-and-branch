@@ -1,11 +1,14 @@
 package net.modcrafters.minecraft.bedandbranch.item;
 
+import net.modcrafters.minecraft.bedandbranch.block.BerryObeliskBlock;
 import net.modcrafters.minecraft.bedandbranch.block.CropStickBlock;
 import net.modcrafters.minecraft.bedandbranch.block.ModBlocks;
 import net.modcrafters.minecraft.bedandbranch.block.StickPlant;
+import net.modcrafters.minecraft.bedandbranch.block.VineTrellisBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -39,9 +42,16 @@ public class StageStickItem extends Item {
         if (age == null) {
             return InteractionResult.PASS;
         }
-        int next = state.getValue(age) + delta;
+        int current = state.getValue(age);
+        if (delta > 0 && current >= finalStage(state, age)) {
+            if (VineTrellisBlock.startAbove(level, pos, state) || BerryObeliskBlock.startAbove(level, pos, state)) {
+                return InteractionResult.SUCCESS;
+            }
+            return InteractionResult.CONSUME;
+        }
+        int next = current + delta;
         if (!age.getPossibleValues().contains(next)) {
-            return InteractionResult.FAIL;
+            return InteractionResult.CONSUME;
         }
         if (!level.isClientSide()) {
             level.setBlock(pos, state.setValue(age, next), Block.UPDATE_CLIENTS);
@@ -49,8 +59,23 @@ public class StageStickItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
+    /** A stage stick is in one of the hands, so this click must not harvest. */
+    public static boolean heldBy(Player player) {
+        if (player == null) {
+            return false;
+        }
+        return player.getMainHandItem().getItem() instanceof StageStickItem
+                || player.getOffhandItem().getItem() instanceof StageStickItem;
+    }
+
     private static IntegerProperty ageOf(BlockState state) {
         if (state.is(ModBlocks.CROP_STICK) && state.getValue(StickPlant.PROPERTY) == StickPlant.NONE) {
+            return null;
+        }
+        if (state.is(ModBlocks.VINE_TRELLIS) && state.getValue(VineTrellisBlock.AGE) == 0) {
+            return null;
+        }
+        if (state.is(ModBlocks.BERRY_OBELISK) && state.getValue(BerryObeliskBlock.AGE) == 0) {
             return null;
         }
         for (Property<?> property : state.getProperties()) {
@@ -59,5 +84,20 @@ public class StageStickItem extends Item {
             }
         }
         return null;
+    }
+
+    /** The stage a plant can be harvested at. The +1 stick stops there. */
+    private static int finalStage(BlockState state, IntegerProperty age) {
+        if (state.is(ModBlocks.CROP_STICK)) {
+            return state.getValue(StickPlant.PROPERTY).maxAge();
+        }
+        if (state.is(ModBlocks.VINE_TRELLIS)) {
+            return VineTrellisBlock.MAX_AGE;
+        }
+        int limit = 0;
+        for (int value : age.getPossibleValues()) {
+            limit = Math.max(limit, value);
+        }
+        return limit;
     }
 }
