@@ -1,0 +1,133 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "bed_and_branch:block/rice_stem",
+    "stem": "bed_and_branch:block/rice_stem",
+    "leaf": "bed_and_branch:block/rice_leaf",
+    "panicle": "bed_and_branch:block/rice_panicle",
+    "panicle_green": "bed_and_branch:block/rice_panicle_green"
+  },
+  "elements": [
+    {
+      "from": [
+        3.15,
+        -2.2,
+        3.55
+      ],
+      "to": [
+        3.57,
+        1.88,
+        3.97
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.42,
+            4.08
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            4,
+            0,
+            4.42,
+            4.08
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            2,
+            0,
+            2.42,
+            4.08
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            8,
+            0,
+            8.42,
+            4.08
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            2.42,
+            2.42
+          ],
+          "texture": "#stem"
+        }
+      }
+    },
+    {
+      "from": [
+        3.15,
+        -2.2,
+        10.55
+      ],
+      "to": [
+        3.57,
+        1.733,
+        10.97
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.42,
+            3.933
+          ],
+          "texture": "#stem"
+        },
+        "south": {
+          "uv": [
+            4,
+            0,
+            4.42,
+            3.933
+          ],
+          "texture": "#stem"
+        },
+        "west": {
+          "uv": [
+            2,
+            0,
+            2.42,
+            3.933
+          ],
+          "texture": "#stem"
+        },
+        "east": {
+          "uv": [
+            8,
+            0,
+            8.42,
+            3.933
+          ],
+          "texture": "#stem"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            2.42,
+            2.42
+          ],
+          "texture": "#stem"
+        }
+      }
+    }
+  ]
+}

@@ -64,6 +64,22 @@
   { "when": { "plant": "pumpkin", "age": "4" }, "apply": { "model": "bed_and_branch:block/pumpkin_staked_4" } },
   { "when": { "plant": "pumpkin", "age": "5" }, "apply": { "model": "bed_and_branch:block/pumpkin_staked_5" } },
   { "when": { "plant": "pumpkin", "age": "6" }, "apply": { "model": "bed_and_branch:block/pumpkin_staked_6" } },
-  { "when": { "plant": "pumpkin", "age": "7" }, "apply": { "model": "bed_and_branch:block/pumpkin_staked_7" } }
+  { "when": { "plant": "pumpkin", "age": "7" }, "apply": { "model": "bed_and_branch:block/pumpkin_staked_7" } },
+  { "when": { "plant": "rice", "age": "0" }, "apply": { "model": "bed_and_branch:block/rice_staked_0" } },
+  { "when": { "plant": "rice", "age": "1" }, "apply": { "model": "bed_and_branch:block/rice_staked_1" } },
+  { "when": { "plant": "rice", "age": "2" }, "apply": { "model": "bed_and_branch:block/rice_staked_2" } },
+  { "when": { "plant": "rice", "age": "3" }, "apply": { "model": "bed_and_branch:block/rice_staked_3" } },
+  { "when": { "plant": "rice", "age": "4" }, "apply": { "model": "bed_and_branch:block/rice_staked_4" } },
+  { "when": { "plant": "rice", "age": "5" }, "apply": { "model": "bed_and_branch:block/rice_staked_5" } },
+  { "when": { "plant": "rice", "age": "6" }, "apply": { "model": "bed_and_branch:block/rice_staked_6" } },
+  { "when": { "plant": "rice", "age": "7" }, "apply": { "model": "bed_and_branch:block/rice_staked_7" } },
+  { "when": { "plant": "corn", "age": "0" }, "apply": { "model": "bed_and_branch:block/corn_staked_0" } },
+  { "when": { "plant": "corn", "age": "1" }, "apply": { "model": "bed_and_branch:block/corn_staked_1" } },
+  { "when": { "plant": "corn", "age": "2" }, "apply": { "model": "bed_and_branch:block/corn_staked_2" } },
+  { "when": { "plant": "corn", "age": "3" }, "apply": { "model": "bed_and_branch:block/corn_staked_3" } },
+  { "when": { "plant": "corn", "age": "4" }, "apply": { "model": "bed_and_branch:block/corn_staked_4" } },
+  { "when": { "plant": "corn", "age": "5" }, "apply": { "model": "bed_and_branch:block/corn_staked_5" } },
+  { "when": { "plant": "corn", "age": "6" }, "apply": { "model": "bed_and_branch:block/corn_staked_6" } },
+  { "when": { "plant": "corn", "age": "7" }, "apply": { "model": "bed_and_branch:block/corn_staked_7" } }
   ]
 }

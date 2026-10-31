@@ -1,0 +1,255 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "bed_and_branch:block/corn_stalk",
+    "stalk": "bed_and_branch:block/corn_stalk",
+    "leaf": "bed_and_branch:block/corn_leaf",
+    "husk": "bed_and_branch:block/corn_husk",
+    "kernel": "bed_and_branch:block/corn_kernel",
+    "tassel": "bed_and_branch:block/corn_tassel",
+    "silk": "bed_and_branch:block/corn_silk"
+  },
+  "elements": [
+    {
+      "from": [
+        4.7,
+        -1,
+        4.7
+      ],
+      "to": [
+        5.32,
+        2.88,
+        5.32
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.62,
+            3.88
+          ],
+          "texture": "#stalk"
+        },
+        "south": {
+          "uv": [
+            4,
+            0,
+            4.62,
+            3.88
+          ],
+          "texture": "#stalk"
+        },
+        "west": {
+          "uv": [
+            8,
+            0,
+            8.62,
+            3.88
+          ],
+          "texture": "#stalk"
+        },
+        "east": {
+          "uv": [
+            2,
+            0,
+            2.62,
+            3.88
+          ],
+          "texture": "#stalk"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            2.62,
+            2.62
+          ],
+          "texture": "#stalk"
+        }
+      }
+    },
+    {
+      "from": [
+        10.3,
+        -1,
+        4.9
+      ],
+      "to": [
+        10.92,
+        3.2,
+        5.52
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            0,
+            1.62,
+            4.2
+          ],
+          "texture": "#stalk"
+        },
+        "south": {
+          "uv": [
+            5,
+            0,
+            5.62,
+            4.2
+          ],
+          "texture": "#stalk"
+        },
+        "west": {
+          "uv": [
+            8,
+            0,
+            8.62,
+            4.2
+          ],
+          "texture": "#stalk"
+        },
+        "east": {
+          "uv": [
+            2,
+            0,
+            2.62,
+            4.2
+          ],
+          "texture": "#stalk"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            2.62,
+            2.62
+          ],
+          "texture": "#stalk"
+        }
+      }
+    },
+    {
+      "from": [
+        4.9,
+        -1,
+        10.3
+      ],
+      "to": [
+        5.52,
+        2.752,
+        10.92
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            0,
+            2.62,
+            3.752
+          ],
+          "texture": "#stalk"
+        },
+        "south": {
+          "uv": [
+            6,
+            0,
+            6.62,
+            3.752
+          ],
+          "texture": "#stalk"
+        },
+        "west": {
+          "uv": [
+            8,
+            0,
+            8.62,
+            3.752
+          ],
+          "texture": "#stalk"
+        },
+        "east": {
+          "uv": [
+            2,
+            0,
+            2.62,
+            3.752
+          ],
+          "texture": "#stalk"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            2.62,
+            2.62
+          ],
+          "texture": "#stalk"
+        }
+      }
+    },
+    {
+      "from": [
+        10.2,
+        -1,
+        10.1
+      ],
+      "to": [
+        10.82,
+        3.04,
+        10.72
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            0,
+            3.62,
+            4.04
+          ],
+          "texture": "#stalk"
+        },
+        "south": {
+          "uv": [
+            7,
+            0,
+            7.62,
+            4.04
+          ],
+          "texture": "#stalk"
+        },
+        "west": {
+          "uv": [
+            8,
+            0,
+            8.62,
+            4.04
+          ],
+          "texture": "#stalk"
+        },
+        "east": {
+          "uv": [
+            2,
+            0,
+            2.62,
+            4.04
+          ],
+          "texture": "#stalk"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            2.62,
+            2.62
+          ],
+          "texture": "#stalk"
+        }
+      }
+    }
+  ]
+}

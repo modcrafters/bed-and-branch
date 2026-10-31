@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "bed_and_branch:item/corn_seeds"
+  }
+}

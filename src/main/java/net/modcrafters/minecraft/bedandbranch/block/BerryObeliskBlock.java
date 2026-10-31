@@ -1,10 +1,13 @@
 package net.modcrafters.minecraft.bedandbranch.block;
 
 import net.modcrafters.minecraft.bedandbranch.growth.Fertility;
+import net.modcrafters.minecraft.bedandbranch.growth.SpreadRules;
 import net.modcrafters.minecraft.bedandbranch.item.StageStickItem;
+import net.modcrafters.minecraft.bedandbranch.soil.SoilKind;
 //? if <1.21.2
 //import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -42,6 +45,8 @@ public class BerryObeliskBlock extends GardenSupportBlock implements Bonemealabl
     /** 0 is an empty cage. 1 to 4 is the branch structure. Berries are a separate layer on a full bush. */
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 4);
     public static final IntegerProperty FRUIT = IntegerProperty.create("fruit", 0, 2);
+    /** Kept so bushes placed while this counted a ready cycle still load. It no longer delays spreading. */
+    public static final IntegerProperty SPREAD = IntegerProperty.create("spread", 0, 4);
     /** The bottom cage holds the base of the bush. The stacked cage holds the top. */
     public static final EnumProperty<ObeliskPart> PART = EnumProperty.create("part", ObeliskPart.class);
     public static final int MAX_AGE = 4;
@@ -51,7 +56,11 @@ public class BerryObeliskBlock extends GardenSupportBlock implements Bonemealabl
 
     public BerryObeliskBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(AGE, 0).setValue(FRUIT, 0).setValue(PART, ObeliskPart.BASE));
+        registerDefaultState(defaultBlockState()
+                .setValue(AGE, 0)
+                .setValue(FRUIT, 0)
+                .setValue(PART, ObeliskPart.BASE)
+                .setValue(SPREAD, 0));
     }
 
     @Override
@@ -103,6 +112,9 @@ public class BerryObeliskBlock extends GardenSupportBlock implements Bonemealabl
         }
         growIntoAbove(level, pos);
         growFruit(level, pos, state);
+        if (isGround(level, pos)) {
+            spread(level, pos, random);
+        }
     }
 
     //? if >=1.21.2 {
@@ -176,7 +188,11 @@ public class BerryObeliskBlock extends GardenSupportBlock implements Bonemealabl
             return InteractionResult.FAIL;
         }
         if (!level.isClientSide()) {
-            level.setBlock(root, rootState.setValue(AGE, 1).setValue(FRUIT, 0).setValue(PART, ObeliskPart.BASE), Block.UPDATE_ALL);
+            level.setBlock(
+                    root,
+                    rootState.setValue(AGE, 1).setValue(FRUIT, 0).setValue(PART, ObeliskPart.BASE).setValue(SPREAD, 0),
+                    Block.UPDATE_ALL
+            );
             if (player == null || !player.hasInfiniteMaterials()) {
                 stack.shrink(1);
             }
@@ -305,6 +321,96 @@ public class BerryObeliskBlock extends GardenSupportBlock implements Bonemealabl
         return true;
     }
 
+    /**
+     * A full ground bush copies itself onto an empty ground obelisk on loam, on the same rolls that grew it,
+     * and only on one try in five. The cage above does not spread.
+     */
+    private static void spread(ServerLevel level, BlockPos pos, RandomSource random) {
+        BlockState state = level.getBlockState(pos);
+        if (!state.is(ModBlocks.BERRY_OBELISK)) {
+            return;
+        }
+        boolean sourceSuits = SpreadRules.accepts("sweet_berry", farmlandSoil(level, pos));
+        List<BlockPos> empty = new ArrayList<>();
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockPos neighbor = pos.relative(direction);
+            BlockState there = level.getBlockState(neighbor);
+            if (there.is(ModBlocks.BERRY_OBELISK) && there.getValue(AGE) == 0 && isGround(level, neighbor)) {
+                empty.add(neighbor);
+            }
+        }
+        if (empty.isEmpty()) {
+            return;
+        }
+        BlockPos target = empty.get(random.nextInt(empty.size()));
+        boolean targetSuits = SpreadRules.accepts("sweet_berry", farmlandSoil(level, target));
+        if (!SpreadRules.isAttempt(sourceSuits, targetSuits) || !SpreadRules.plants(random.nextInt(5))) {
+            return;
+        }
+        BlockState neighbor = level.getBlockState(target);
+        level.setBlock(
+                target,
+                neighbor.setValue(AGE, 1).setValue(FRUIT, 0).setValue(PART, ObeliskPart.BASE).setValue(SPREAD, 0),
+                Block.UPDATE_CLIENTS
+        );
+        level.playSound(null, target, SoundEvents.SWEET_BERRY_BUSH_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+    }
+
+    /**
+     * Debug stick. A full ground bush copies itself onto one empty obelisk now, skipping the 1-in-5.
+     * The cage above counts as the bush below it.
+     */
+    public static boolean spreadNow(Level level, BlockPos pos, BlockState state) {
+        if (!state.is(ModBlocks.BERRY_OBELISK) || state.getValue(AGE) == 0) {
+            return false;
+        }
+        BlockPos root = bottomOf(level, pos);
+        BlockState rootState = level.getBlockState(root);
+        if (!rootState.is(ModBlocks.BERRY_OBELISK) || rootState.getValue(AGE) < MAX_AGE || !isGround(level, root)) {
+            return false;
+        }
+        if (!SpreadRules.accepts("sweet_berry", farmlandSoil(level, root))) {
+            return false;
+        }
+        BlockPos target = emptyObelisk(level, root);
+        if (target == null) {
+            return false;
+        }
+        if (!level.isClientSide()) {
+            BlockState neighbor = level.getBlockState(target);
+            level.setBlock(
+                    target,
+                    neighbor.setValue(AGE, 1).setValue(FRUIT, 0).setValue(PART, ObeliskPart.BASE).setValue(SPREAD, 0),
+                    Block.UPDATE_CLIENTS
+            );
+            level.setBlock(root, rootState.setValue(SPREAD, MAX_AGE), Block.UPDATE_CLIENTS);
+            level.playSound(null, target, SoundEvents.SWEET_BERRY_BUSH_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
+        return true;
+    }
+
+    private static BlockPos emptyObelisk(Level level, BlockPos pos) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockPos neighbor = pos.relative(direction);
+            BlockState there = level.getBlockState(neighbor);
+            if (!there.is(ModBlocks.BERRY_OBELISK) || there.getValue(AGE) != 0 || !isGround(level, neighbor)) {
+                continue;
+            }
+            if (SpreadRules.accepts("sweet_berry", farmlandSoil(level, neighbor))) {
+                return neighbor;
+            }
+        }
+        return null;
+    }
+
+    private static SoilKind farmlandSoil(Level level, BlockPos support) {
+        return SoilFarmlandBlock.kind(level.getBlockState(support.below()));
+    }
+
+    private static boolean isGround(Level level, BlockPos pos) {
+        return accepts(level.getBlockState(pos.below()));
+    }
+
     /** Hand planting is any ordinary farmland. Nether farmland is for weeping vines. */
     private static boolean accepts(BlockState soil) {
         return soil.getBlock() instanceof FarmlandBlock && !(soil.getBlock() instanceof NetherFarmlandBlock);
@@ -325,7 +431,7 @@ public class BerryObeliskBlock extends GardenSupportBlock implements Bonemealabl
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(AGE, FRUIT, PART);
+        builder.add(AGE, FRUIT, PART, SPREAD);
     }
 
     /** Posts and the plank bands, the same boxes as the model. */

@@ -4,8 +4,7 @@
   "package": "net.modcrafters.minecraft.bedandbranch.mixin",
   "compatibilityLevel": "JAVA_${java_version}",
   "mixins": [
-    ${extra_mixins}"ContainedWaterMixin",
-    "HoeTillMixin",
+    ${extra_mixins}"HoeTillMixin",
     "MudBucketMixin",
     "FarmlandStickMixin"
   ],

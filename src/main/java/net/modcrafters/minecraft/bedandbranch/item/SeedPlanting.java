@@ -56,7 +56,11 @@ public final class SeedPlanting {
             return InteractionResult.PASS;
         }
         if (!level.isClientSide()) {
-            level.setBlock(pos, stick.setValue(StickPlant.PROPERTY, plant).setValue(CropStickBlock.AGE, 0), Block.UPDATE_ALL);
+            level.setBlock(
+                    pos,
+                    stick.setValue(StickPlant.PROPERTY, plant).setValue(CropStickBlock.AGE, 0).setValue(CropStickBlock.SPREAD, 0),
+                    Block.UPDATE_ALL
+            );
             level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0F, 1.0F);
             if (player == null || !player.hasInfiniteMaterials()) {
                 stack.shrink(1);

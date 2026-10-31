@@ -14,7 +14,7 @@ public final class SoilRules {
             case "minecraft:sand", "minecraft:red_sand" -> Optional.of(SoilKind.SANDY);
             case "bed_and_branch:loam" -> Optional.of(SoilKind.LOAM);
             case "bed_and_branch:peat" -> Optional.of(SoilKind.PEAT);
-            case "minecraft:mud", "bed_and_branch:mud" -> Optional.of(SoilKind.MUD);
+            case "minecraft:mud" -> Optional.of(SoilKind.MUD);
             default -> Optional.empty();
         };
     }

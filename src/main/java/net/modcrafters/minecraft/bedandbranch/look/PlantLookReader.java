@@ -36,8 +36,9 @@ public final class PlantLookReader {
     }
 
     private static PlantLook fromBed(LevelReader level, BlockPos farmlandPos, BlockState farmland, BlockState plant) {
-        SoilKind soil = SoilLookup.kindOf(level.getBlockState(farmlandPos.below()))
-                .orElseGet(() -> farmland.getValue(SoilState.PROPERTY).kind());
+        SoilKind under = SoilLookup.kindOf(level.getBlockState(farmlandPos.below())).orElse(null);
+        SoilKind saved = farmland.getValue(SoilState.PROPERTY).kind();
+        SoilKind soil = saved == SoilKind.FLOODED_MUD && under == SoilKind.MUD ? saved : under != null ? under : saved;
         boolean watered = farmland.hasProperty(FarmlandBlock.MOISTURE) && farmland.getValue(FarmlandBlock.MOISTURE) > 0;
         Growing growing = growing(plant);
         PlantLook.Suitability suitability = PlantLook.Suitability.UNSPECIFIED;
