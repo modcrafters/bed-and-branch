@@ -1,11 +1,15 @@
 package net.modcrafters.minecraft.bedandbranch.block;
 
+import net.modcrafters.minecraft.bedandbranch.growth.CrossBook;
 import net.modcrafters.minecraft.bedandbranch.growth.Fertility;
+import net.modcrafters.minecraft.bedandbranch.growth.SpreadRules;
 import net.modcrafters.minecraft.bedandbranch.item.SeedPlanting;
 import net.modcrafters.minecraft.bedandbranch.item.StageStickItem;
+import net.modcrafters.minecraft.bedandbranch.soil.SoilKind;
 //? if <1.21.2
 //import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -46,6 +50,8 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
 /*public class CropStickBlock extends BushBlock implements BonemealableBlock {
 *///?}
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 7);
+    /** Kept so sticks placed while this counted a ready cycle still load. It no longer delays spreading. */
+    public static final IntegerProperty SPREAD = IntegerProperty.create("spread", 0, 7);
 
     private static final VoxelShape SHAPE = Shapes.or(
             Block.box(1.0, -1.0, 1.0, 2.0, 15.0, 2.0),
@@ -56,7 +62,10 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
 
     public CropStickBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(StickPlant.PROPERTY, StickPlant.NONE).setValue(AGE, 0));
+        registerDefaultState(defaultBlockState()
+                .setValue(StickPlant.PROPERTY, StickPlant.NONE)
+                .setValue(AGE, 0)
+                .setValue(SPREAD, 0));
     }
 
     /** Open torchflowers shine. Younger stages and every other plant stay dark. */
@@ -107,13 +116,10 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
         }
         if (!plant.survives(level, pos)) {
             Block.popResource(level, pos, new ItemStack(plant.seed()));
-            level.setBlock(pos, state.setValue(StickPlant.PROPERTY, StickPlant.NONE).setValue(AGE, 0), Block.UPDATE_ALL);
+            level.setBlock(pos, state.setValue(StickPlant.PROPERTY, StickPlant.NONE).setValue(AGE, 0).setValue(SPREAD, 0), Block.UPDATE_ALL);
             return;
         }
         int age = state.getValue(AGE);
-        if (age >= plant.maxAge()) {
-            return;
-        }
         if (level.getRawBrightness(pos, 0) < 9) {
             return;
         }
@@ -125,7 +131,123 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
         if (random.nextInt((int) (25.0F / speed) + 1) != 0) {
             return;
         }
+        if (age >= plant.maxAge()) {
+            spread(level, pos, state, plant, random);
+            return;
+        }
         level.setBlock(pos, state.setValue(AGE, age + 1), Block.UPDATE_CLIENTS);
+    }
+
+    /**
+     * A mature plant picks one empty stick beside it.
+     * That stick looks at the mature plants beside it. A cross that suits the empty soil wins.
+     * Otherwise the plant copies itself when the empty soil suits it too.
+     * Neither is not a try, so it does not spend the 1 in 5.
+     */
+    private static void spread(ServerLevel level, BlockPos pos, BlockState state, StickPlant plant, RandomSource random) {
+        if (!SpreadRules.accepts(plant.getSerializedName(), farmlandSoil(level, pos))) {
+            return;
+        }
+        CrossBook.use(level.getServer().getResourceManager());
+        List<BlockPos> empty = new ArrayList<>();
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockPos neighbor = pos.relative(direction);
+            BlockState there = level.getBlockState(neighbor);
+            if (there.is(ModBlocks.CROP_STICK) && there.getValue(StickPlant.PROPERTY) == StickPlant.NONE) {
+                empty.add(neighbor);
+            }
+        }
+        if (empty.isEmpty()) {
+            return;
+        }
+        BlockPos target = empty.get(random.nextInt(empty.size()));
+        StickPlant child = outcome(level, pos, target, plant, random);
+        if (child == null || !SpreadRules.plants(random.nextInt(5))) {
+            return;
+        }
+        plantChild(level, pos, state, target, child);
+    }
+
+    /**
+     * Debug stick. A finished plant crosses or copies onto one empty stick now, skipping the 1-in-5.
+     */
+    public static boolean spreadNow(Level level, BlockPos pos, BlockState state) {
+        if (!state.is(ModBlocks.CROP_STICK)) {
+            return false;
+        }
+        StickPlant plant = state.getValue(StickPlant.PROPERTY);
+        if (plant == StickPlant.NONE || state.getValue(AGE) < plant.maxAge()) {
+            return false;
+        }
+        if (!SpreadRules.accepts(plant.getSerializedName(), farmlandSoil(level, pos))) {
+            return false;
+        }
+        if (level instanceof ServerLevel server) {
+            CrossBook.use(server.getServer().getResourceManager());
+        }
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockPos target = pos.relative(direction);
+            BlockState there = level.getBlockState(target);
+            if (!there.is(ModBlocks.CROP_STICK) || there.getValue(StickPlant.PROPERTY) != StickPlant.NONE) {
+                continue;
+            }
+            StickPlant child = outcome(level, pos, target, plant, level instanceof ServerLevel server ? server.getRandom() : null);
+            if (child == null) {
+                continue;
+            }
+            if (level instanceof ServerLevel server) {
+                plantChild(server, pos, state, target, child);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private static StickPlant outcome(Level level, BlockPos source, BlockPos target, StickPlant spreading, RandomSource random) {
+        List<String> partners = new ArrayList<>();
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockPos beside = target.relative(direction);
+            if (beside.equals(source)) {
+                continue;
+            }
+            BlockState there = level.getBlockState(beside);
+            if (!there.is(ModBlocks.CROP_STICK)) {
+                continue;
+            }
+            StickPlant neighbor = there.getValue(StickPlant.PROPERTY);
+            if (neighbor == StickPlant.NONE || there.getValue(AGE) < neighbor.maxAge()) {
+                continue;
+            }
+            if (!SpreadRules.accepts(neighbor.getSerializedName(), farmlandSoil(level, beside))) {
+                continue;
+            }
+            partners.add(neighbor.plantId());
+        }
+        SoilKind soil = farmlandSoil(level, target);
+        String crossed = CrossBook.pick(spreading.plantId(), partners, soil, bound -> random == null ? 0 : random.nextInt(bound));
+        StickPlant child = StickPlant.byName(crossed);
+        if (child != null && child.survives(level, target)) {
+            return child;
+        }
+        if (SpreadRules.accepts(spreading.getSerializedName(), soil) && spreading.survives(level, target)) {
+            return spreading;
+        }
+        return null;
+    }
+
+    private static void plantChild(ServerLevel level, BlockPos source, BlockState sourceState, BlockPos target, StickPlant child) {
+        BlockState neighbor = level.getBlockState(target);
+        level.setBlock(
+                target,
+                neighbor.setValue(StickPlant.PROPERTY, child).setValue(AGE, 0).setValue(SPREAD, 0),
+                Block.UPDATE_CLIENTS
+        );
+        level.setBlock(source, sourceState.setValue(SPREAD, sourceState.getValue(StickPlant.PROPERTY).maxAge()), Block.UPDATE_CLIENTS);
+        level.playSound(null, target, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0F, 1.0F);
+    }
+
+    private static SoilKind farmlandSoil(Level level, BlockPos support) {
+        return SoilFarmlandBlock.kind(level.getBlockState(support.below()));
     }
 
     public static InteractionResult usePlantedStick(ItemStack stack, Level level, BlockPos pos, Player player) {
@@ -160,7 +282,7 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
         }
         if (!level.isClientSide()) {
             Block.popResource(level, pos, new ItemStack(plant.fruit()));
-            level.setBlock(pos, state.setValue(AGE, 0), Block.UPDATE_ALL);
+            level.setBlock(pos, state.setValue(AGE, 0).setValue(SPREAD, 0), Block.UPDATE_ALL);
             level.playSound(null, pos, SoundEvents.CROP_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
         return InteractionResult.SUCCESS;
@@ -265,7 +387,7 @@ public class CropStickBlock extends VegetationBlock implements BonemealableBlock
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(StickPlant.PROPERTY, AGE);
+        builder.add(StickPlant.PROPERTY, AGE, SPREAD);
     }
 
     private static float growthSpeed(BlockGetter level, BlockPos pos) {

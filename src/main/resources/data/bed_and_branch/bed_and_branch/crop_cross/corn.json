@@ -1,0 +1,4 @@
+{
+  "parents": ["minecraft:wheat", "bed_and_branch:rice"],
+  "offspring": "bed_and_branch:corn_seeds"
+}

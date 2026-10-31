@@ -1,7 +1,10 @@
 package net.modcrafters.minecraft.bedandbranch.block;
 
 import net.modcrafters.minecraft.bedandbranch.item.ModItems;
+import net.modcrafters.minecraft.bedandbranch.item.CornSeedsItem;
+import net.modcrafters.minecraft.bedandbranch.item.RiceSeedsItem;
 import net.modcrafters.minecraft.bedandbranch.item.TomatoSeedsItem;
+import net.modcrafters.minecraft.bedandbranch.soil.SoilKind;
 import net.modcrafters.minecraft.bedandbranch.soil.SoilLookup;
 import net.modcrafters.minecraft.bedandbranch.soil.SoilRules;
 import net.minecraft.core.BlockPos;
@@ -27,7 +30,9 @@ public enum StickPlant implements StringRepresentable {
     BEETROOT("beetroot", Blocks.BEETROOTS, 4),
     TORCHFLOWER("torchflower", Blocks.TORCHFLOWER_CROP, 2),
     MELON("melon", Blocks.MELON_STEM, 7),
-    PUMPKIN("pumpkin", Blocks.PUMPKIN_STEM, 7);
+    PUMPKIN("pumpkin", Blocks.PUMPKIN_STEM, 7),
+    RICE("rice", null, 7),
+    CORN("corn", null, 7);
 
     public static final EnumProperty<StickPlant> PROPERTY = EnumProperty.create("plant", StickPlant.class);
 
@@ -48,6 +53,12 @@ public enum StickPlant implements StringRepresentable {
     public static StickPlant fromSeed(ItemStack stack) {
         if (stack.getItem() instanceof TomatoSeedsItem) {
             return TOMATO;
+        }
+        if (stack.getItem() instanceof RiceSeedsItem) {
+            return RICE;
+        }
+        if (stack.getItem() instanceof CornSeedsItem) {
+            return CORN;
         }
         if (!(stack.getItem() instanceof BlockItem blockItem)) {
             return null;
@@ -79,6 +90,13 @@ public enum StickPlant implements StringRepresentable {
             }
             return SoilRules.tomatoSurvives(true, SoilLookup.kindOf(level.getBlockState(pos.below(2))).orElse(null));
         }
+        if (this == RICE) {
+            return SoilFarmlandBlock.kind(level.getBlockState(pos.below())) == SoilKind.FLOODED_MUD;
+        }
+        // Corn is bred onto loam, but a taken ear can be planted on any tilled soil.
+        if (this == CORN) {
+            return CropStickBlock.sitsOn(level.getBlockState(pos.below()));
+        }
         return vanilla.defaultBlockState().canSurvive(level, pos);
     }
 
@@ -93,6 +111,8 @@ public enum StickPlant implements StringRepresentable {
             case TORCHFLOWER -> Items.TORCHFLOWER_SEEDS;
             case MELON -> Items.MELON_SEEDS;
             case PUMPKIN -> Items.PUMPKIN_SEEDS;
+            case RICE -> ModItems.RICE_SEEDS;
+            case CORN -> ModItems.CORN_SEEDS;
         };
     }
 
@@ -107,6 +127,8 @@ public enum StickPlant implements StringRepresentable {
             case TOMATO -> ModItems.TOMATO;
             case MELON -> Items.MELON;
             case PUMPKIN -> Items.PUMPKIN;
+            case RICE -> ModItems.RICE;
+            case CORN -> ModItems.CORN;
         };
     }
 
@@ -123,6 +145,33 @@ public enum StickPlant implements StringRepresentable {
             return;
         }
         drops.add(new ItemStack(seed()));
+    }
+
+    /** Id used by cross recipes. Vanilla crops use their item name, so wheat is {@code minecraft:wheat}. */
+    public String plantId() {
+        return switch (this) {
+            case NONE -> "bed_and_branch:none";
+            case WHEAT -> "minecraft:wheat";
+            case CARROT -> "minecraft:carrot";
+            case POTATO -> "minecraft:potato";
+            case BEETROOT -> "minecraft:beetroot";
+            case MELON -> "minecraft:melon";
+            case PUMPKIN -> "minecraft:pumpkin";
+            case TORCHFLOWER -> "minecraft:torchflower";
+            default -> "bed_and_branch:" + serialized;
+        };
+    }
+
+    public static StickPlant byName(String name) {
+        if (name == null) {
+            return null;
+        }
+        for (StickPlant plant : values()) {
+            if (plant.serialized.equals(name)) {
+                return plant;
+            }
+        }
+        return null;
     }
 
     @Override

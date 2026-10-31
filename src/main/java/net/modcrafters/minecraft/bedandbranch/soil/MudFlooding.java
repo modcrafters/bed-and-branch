@@ -1,7 +1,6 @@
 package net.modcrafters.minecraft.bedandbranch.soil;
 
 import net.modcrafters.minecraft.bedandbranch.block.ModBlocks;
-import net.modcrafters.minecraft.bedandbranch.block.MudBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -43,31 +42,25 @@ public final class MudFlooding {
     }
 
     private static Optional<InteractionResult> fill(Player player, InteractionHand hand, Level level, BlockPos pos) {
-        BlockPos mudPos = mudPos(level, pos);
-        if (mudPos == null || !level.mayInteract(player, mudPos)) {
+        if (!isDryMudFarmland(level, pos)) {
             return Optional.empty();
         }
-        BlockState mud = level.getBlockState(mudPos);
         if (!level.isClientSide()) {
-            BlockState flooded = ModBlocks.MUD.defaultBlockState().setValue(MudBlock.WATERLOGGED, true);
-            if (mud.is(ModBlocks.MUD)) {
-                flooded = mud.setValue(MudBlock.WATERLOGGED, true);
-            }
-            level.setBlock(mudPos, flooded, Block.UPDATE_ALL);
-            level.playSound(null, mudPos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+            BlockState farmland = level.getBlockState(pos);
+            level.setBlock(pos, farmland.setValue(SoilState.PROPERTY, SoilState.FLOODED_MUD), Block.UPDATE_ALL);
+            level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
         return swapped(player, hand, level, new ItemStack(Items.BUCKET));
     }
 
     private static Optional<InteractionResult> empty(Player player, InteractionHand hand, Level level, BlockPos pos) {
-        BlockPos mudPos = floodedPos(level, pos);
-        if (mudPos == null || !level.mayInteract(player, mudPos)) {
+        if (!isFloodedFarmland(level, pos)) {
             return Optional.empty();
         }
         if (!level.isClientSide()) {
-            BlockState mud = level.getBlockState(mudPos);
-            level.setBlock(mudPos, mud.setValue(MudBlock.WATERLOGGED, false), Block.UPDATE_ALL);
-            level.playSound(null, mudPos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+            BlockState farmland = level.getBlockState(pos);
+            level.setBlock(pos, farmland.setValue(SoilState.PROPERTY, SoilState.MUD), Block.UPDATE_ALL);
+            level.playSound(null, pos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
         return swapped(player, hand, level, new ItemStack(Items.WATER_BUCKET));
     }
@@ -84,34 +77,16 @@ public final class MudFlooding {
         *///?}
     }
 
-    private static BlockPos mudPos(Level level, BlockPos pos) {
-        if (isDryMud(level.getBlockState(pos))) {
-            return pos;
-        }
-        if (level.getBlockState(pos).is(ModBlocks.FARMLAND) && isDryMud(level.getBlockState(pos.below()))) {
-            return pos.below();
-        }
-        return null;
+    /** Tilled soil on vanilla mud, still dry, so a water bucket can flood it. */
+    private static boolean isDryMudFarmland(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        return state.is(ModBlocks.FARMLAND)
+                && state.getValue(SoilState.PROPERTY) == SoilState.MUD
+                && level.getBlockState(pos.below()).is(Blocks.MUD);
     }
 
-    private static BlockPos floodedPos(Level level, BlockPos pos) {
-        if (isFlooded(level.getBlockState(pos))) {
-            return pos;
-        }
-        if (level.getBlockState(pos).is(ModBlocks.FARMLAND) && isFlooded(level.getBlockState(pos.below()))) {
-            return pos.below();
-        }
-        return null;
-    }
-
-    private static boolean isDryMud(BlockState state) {
-        if (state.is(Blocks.MUD)) {
-            return true;
-        }
-        return state.is(ModBlocks.MUD) && !state.getValue(MudBlock.WATERLOGGED);
-    }
-
-    private static boolean isFlooded(BlockState state) {
-        return state.is(ModBlocks.MUD) && state.getValue(MudBlock.WATERLOGGED);
+    private static boolean isFloodedFarmland(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        return state.is(ModBlocks.FARMLAND) && state.getValue(SoilState.PROPERTY) == SoilState.FLOODED_MUD;
     }
 }

@@ -40,7 +40,7 @@ public class VineTrellisBlock extends GardenSupportBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     /** 0 is a bare trellis. 1 to 4 is a vanilla vine climbing the panel. */
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 4);
-    /** Extra growth after the ground vine is full. 4 means ready to spread. */
+    /** Kept so trellises placed while this counted a ready cycle still load. It no longer delays spreading. */
     public static final IntegerProperty SPREAD = IntegerProperty.create("spread", 0, 4);
     public static final EnumProperty<TrellisVine> VINE = EnumProperty.create("vine", TrellisVine.class);
     public static final int MAX_AGE = 4;
@@ -117,11 +117,6 @@ public class VineTrellisBlock extends GardenSupportBlock {
         if (!isGround(level, pos)) {
             return;
         }
-        int spread = state.getValue(SPREAD);
-        if (spread < MAX_AGE) {
-            level.setBlock(pos, state.setValue(SPREAD, spread + 1), Block.UPDATE_CLIENTS);
-            return;
-        }
         List<BlockPos> open = openGroundNeighbors(level, pos, vine);
         if (open.isEmpty() || random.nextInt(5) != 0) {
             return;
@@ -183,7 +178,37 @@ public class VineTrellisBlock extends GardenSupportBlock {
         return state.setValue(AGE, age).setValue(SPREAD, 0).setValue(VINE, vine);
     }
 
-    private List<BlockPos> openGroundNeighbors(ServerLevel level, BlockPos pos, TrellisVine vine) {
+    /**
+     * Debug stick. A full ground vine copies itself onto one empty trellis now, skipping the 1-in-5.
+     * An upper panel counts as the vine below it.
+     */
+    public static boolean spreadNow(Level level, BlockPos pos, BlockState state) {
+        if (!state.is(ModBlocks.VINE_TRELLIS) || state.getValue(AGE) == 0) {
+            return false;
+        }
+        if (!(level.getBlockState(pos).getBlock() instanceof VineTrellisBlock trellis)) {
+            return false;
+        }
+        BlockPos root = trellis.bottomOf(level, pos);
+        BlockState rootState = level.getBlockState(root);
+        if (!rootState.is(ModBlocks.VINE_TRELLIS) || rootState.getValue(AGE) < MAX_AGE || !trellis.isGround(level, root)) {
+            return false;
+        }
+        TrellisVine vine = rootState.getValue(VINE);
+        List<BlockPos> open = trellis.openGroundNeighbors(level, root, vine);
+        if (open.isEmpty()) {
+            return false;
+        }
+        if (!level.isClientSide()) {
+            BlockPos target = open.getFirst();
+            BlockState neighbor = level.getBlockState(target);
+            level.setBlock(target, neighbor.setValue(AGE, 1).setValue(SPREAD, 0).setValue(VINE, vine), Block.UPDATE_CLIENTS);
+            level.setBlock(root, rootState.setValue(SPREAD, MAX_AGE), Block.UPDATE_CLIENTS);
+        }
+        return true;
+    }
+
+    private List<BlockPos> openGroundNeighbors(Level level, BlockPos pos, TrellisVine vine) {
         List<BlockPos> open = new ArrayList<>();
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             BlockPos neighbor = pos.relative(direction);

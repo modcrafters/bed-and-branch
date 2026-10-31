@@ -19,7 +19,6 @@ class SoilRulesTest {
         assertEquals(Optional.of(SoilKind.LOAM), SoilRules.kindOf("bed_and_branch:loam"));
         assertEquals(Optional.of(SoilKind.PEAT), SoilRules.kindOf("bed_and_branch:peat"));
         assertEquals(Optional.of(SoilKind.MUD), SoilRules.kindOf("minecraft:mud"));
-        assertEquals(Optional.of(SoilKind.MUD), SoilRules.kindOf("bed_and_branch:mud"));
     }
 
     @Test
@@ -43,7 +42,6 @@ class SoilRulesTest {
         assertTrue(SoilRules.shouldTill("minecraft:dirt", "bed_and_branch:loam"));
         assertTrue(SoilRules.shouldTill("minecraft:dirt", "bed_and_branch:peat"));
         assertTrue(SoilRules.shouldTill("minecraft:dirt", "minecraft:mud"));
-        assertTrue(SoilRules.shouldTill("minecraft:dirt", "bed_and_branch:mud"));
         assertFalse(SoilRules.shouldTill("minecraft:dirt", "minecraft:stone"));
         assertFalse(SoilRules.shouldTill("minecraft:dirt", "minecraft:dirt"));
         assertFalse(SoilRules.shouldTill("minecraft:grass_block", "bed_and_branch:loam"));
@@ -100,7 +98,7 @@ class SoilRulesTest {
         assertTag("soils/sandy", SoilKind.SANDY, "minecraft:sand", "minecraft:red_sand");
         assertTag("soils/loam", SoilKind.LOAM, "bed_and_branch:loam");
         assertTag("soils/peat", SoilKind.PEAT, "bed_and_branch:peat");
-        assertTag("soils/mud", SoilKind.MUD, "minecraft:mud", "bed_and_branch:mud");
+        assertTag("soils/mud", SoilKind.MUD, "minecraft:mud");
         String flooded = readTag("soils/flooded_mud");
         assertTrue(flooded.contains("\"values\""));
         assertFalse(flooded.contains("bed_and_branch:mud"));

@@ -42,6 +42,14 @@ public class SoilFarmlandBlock extends FarmlandBlock {
         registerDefaultState(defaultBlockState().setValue(SoilState.PROPERTY, SoilState.LOAM));
     }
 
+    /** Vanilla farmland and nether farmland have no preferred soil. */
+    public static SoilKind kind(BlockState state) {
+        if (!(state.getBlock() instanceof SoilFarmlandBlock)) {
+            return null;
+        }
+        return state.getValue(SoilState.PROPERTY).kind();
+    }
+
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         SoilKind kind = SoilLookup.kindOf(context.getLevel().getBlockState(context.getClickedPos().below())).orElse(null);
@@ -85,8 +93,12 @@ public class SoilFarmlandBlock extends FarmlandBlock {
     *///?}
 
     private BlockState withSoil(BlockState state, LevelReader level, BlockPos pos) {
-        SoilKind kind = SoilLookup.kindOf(level.getBlockState(pos.below())).orElseThrow();
-        return state.setValue(SoilState.PROPERTY, SoilState.of(kind));
+        SoilKind under = SoilLookup.kindOf(level.getBlockState(pos.below())).orElseThrow();
+        // The flood lives on the tilled soil. Vanilla mud underneath stays dry mud.
+        if (under == SoilKind.MUD && state.getValue(SoilState.PROPERTY) == SoilState.FLOODED_MUD) {
+            return state;
+        }
+        return state.setValue(SoilState.PROPERTY, SoilState.of(under));
     }
 
     @Override

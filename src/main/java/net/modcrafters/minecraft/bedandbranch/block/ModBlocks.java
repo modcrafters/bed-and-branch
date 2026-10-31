@@ -14,7 +14,6 @@ import java.util.function.BiConsumer;
 public final class ModBlocks {
     public static final ResourceKey<Block> LOAM_ID = blockId("loam");
     public static final ResourceKey<Block> PEAT_ID = blockId("peat");
-    public static final ResourceKey<Block> MUD_ID = blockId("mud");
     public static final ResourceKey<Block> FARMLAND_ID = blockId("farmland");
     public static final ResourceKey<Block> NETHER_FARMLAND_ID = blockId("nether_farmland");
     public static final ResourceKey<Block> TOMATO_ID = blockId("tomato");
@@ -24,7 +23,6 @@ public final class ModBlocks {
 
     public static final Block LOAM = new Block(earth(LOAM_ID, SoundType.GRAVEL));
     public static final Block PEAT = new Block(earth(PEAT_ID, SoundType.ROOTED_DIRT));
-    public static final MudBlock MUD = new MudBlock(earth(MUD_ID, SoundType.MUD));
     public static final SoilFarmlandBlock FARMLAND = new SoilFarmlandBlock(farmland());
     public static final NetherFarmlandBlock NETHER_FARMLAND = new NetherFarmlandBlock(netherFarmland());
     public static final TomatoCropBlock TOMATO = new TomatoCropBlock(crop(TOMATO_ID).randomTicks());
@@ -38,7 +36,6 @@ public final class ModBlocks {
     public static void register(BiConsumer<Identifier, Block> out) {
         out.accept(LOAM_ID.identifier(), LOAM);
         out.accept(PEAT_ID.identifier(), PEAT);
-        out.accept(MUD_ID.identifier(), MUD);
         out.accept(FARMLAND_ID.identifier(), FARMLAND);
         out.accept(NETHER_FARMLAND_ID.identifier(), NETHER_FARMLAND);
         out.accept(TOMATO_ID.identifier(), TOMATO);
