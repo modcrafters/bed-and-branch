@@ -1,7 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "key": { "#": { "item": "minecraft:stick" } },
-  "pattern": ["#", "#"],
-  "result": { "count": 1, "id": "bed_and_branch:crop_stick" }
+  "pattern": [
+    "S",
+    "S"
+  ],
+  "key": {
+    "S": {
+      "tag": "bed_and_branch:wooden_sticks"
+    }
+  },
+  "result": {
+    "id": "bed_and_branch:crop_stick",
+    "count": 1
+  }
 }

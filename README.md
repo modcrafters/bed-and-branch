@@ -4,6 +4,20 @@ Minecraft farming mod: crop beds, soils (including flooded mud for rice), crop s
 
 Funny sibling to [Barnyard Romance](https://github.com/modcrafters/barnyard-romance) (animal breeding). Same spirit, dirt instead of livestock.
 
+## Crafting and soil preparation
+
+| Result | Ingredients | Layout |
+|---|---|---|
+| 1 loam | 2 dirt + 1 clay ball | Shapeless |
+| 1 peat | 1 dirt + 1 moss block | Shapeless |
+| 1 crop stick | 2 sticks | One above the other |
+| 1 vine trellis | 7 sticks | `S S` / `SSS` / `S S` |
+| 1 berry obelisk | 6 sticks + 2 planks | `SPS` / `S S` / `SPS` |
+
+In the patterns, `S` is a wooden stick and `P` is any plank. Recipes appear in the recipe book after collecting the relevant materials. Wooden sticks also accept the common `c:rods/wooden` tag when supplied by another mod.
+
+Place dirt above loam, peat, sand/red sand, or mud, then hoe the dirt to prepare the corresponding farmland. Use a water bucket on muddy farmland to flood it for rice; the bucket comes back empty. Nether farmland is prepared by hoeing netherrack above soul sand. These tilled blocks are prepared in the world rather than at a crafting table.
+
 ## Abandoned rice farms
 
 New chunks can contain small abandoned farms in plains, sunflower plains, swamps, rivers, and meadows. Rice grows on flooded muddy farmland above vanilla mud. The plots contain a mix of growth stages, empty crop sticks, irrigation, and a little recoverable loam. Harvest rice to get the seeds for your own farm.

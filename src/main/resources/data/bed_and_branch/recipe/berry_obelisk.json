@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SPS",
+    "S S",
+    "SPS"
+  ],
+  "key": {
+    "S": "#bed_and_branch:wooden_sticks",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "bed_and_branch:berry_obelisk",
+    "count": 1
+  }
+}
