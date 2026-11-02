@@ -71,6 +71,9 @@ jobs:
       - name: Unit tests and jar
         run: ./gradlew :1.21.1:test :neoforge:1.21.1:build
 
+      - name: Farm placement game tests
+        run: ./gradlew :neoforge:1.21.1:runGameTestServer
+
       - uses: actions/upload-artifact@v7
         with:
           name: jars-1.21.1

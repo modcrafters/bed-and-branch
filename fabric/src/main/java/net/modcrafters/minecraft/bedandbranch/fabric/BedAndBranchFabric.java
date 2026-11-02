@@ -5,6 +5,11 @@ import net.modcrafters.minecraft.bedandbranch.block.ModBlocks;
 import net.modcrafters.minecraft.bedandbranch.command.BedCommands;
 import net.modcrafters.minecraft.bedandbranch.item.ModItems;
 import net.modcrafters.minecraft.bedandbranch.item.ModTab;
+import net.modcrafters.minecraft.bedandbranch.worldgen.ModFarms;
+import net.modcrafters.minecraft.bedandbranch.worldgen.FarmLayout;
+import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
@@ -16,6 +21,11 @@ public class BedAndBranchFabric implements ModInitializer {
     public void onInitialize() {
         ModBlocks.register((id, block) -> Registry.register(BuiltInRegistries.BLOCK, id, block));
         ModItems.register((id, item) -> Registry.register(BuiltInRegistries.ITEM, id, item));
+        ModFarms.register((id, codec) -> Registry.register(BuiltInRegistries.FEATURE_TYPE, id, codec));
+        for (FarmLayout layout : FarmLayout.values()) {
+            BiomeModifications.addFeature(BiomeSelectors.tag(ModFarms.BIOMES),
+                    GenerationStep.Decoration.VEGETAL_DECORATION, ModFarms.placed(layout));
+        }
         Registry.register(
                 BuiltInRegistries.CREATIVE_MODE_TAB,
                 ModTab.ID,

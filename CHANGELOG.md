@@ -8,6 +8,9 @@ After publishing, the action commits the next development version and changelog 
 
 ## Unreleased
 
+- Craft vine trellises from seven sticks and berry obelisks from six sticks and two planks. Soil and support recipes now unlock in the recipe book when you collect their materials; supports accept compatible wooden sticks and any planks.
+- Small abandoned rice farms can be found in plains, swamps, rivers, and meadows. Five layouts provide rice seeds, flooded beds, crop sticks, and a little loam to start a farm. Terraced plots follow an existing one-block slope; unsuitable sites are skipped.
+- Fixed NeoForge 1.21.1 refusing to start on Java 21 because its loader-specific mixin configuration requested Java 25.
 - All vanilla crops on sticks have new growth-stage models: golden wheat heads, taller feathery carrot tops and potato foliage, broad beet leaves, opening torchflowers, and low melon and pumpkin vines with round growing fruit. Plants stay rooted as they grow, with roots and tubers showing at soil level.
 - Tomatoes on sticks grow fuller foliage, yellow flowers, and round hanging fruit that ripens from green through blush to red.
 - Corn grows curved leaves, branching tassels, and ears that open to show ripe kernels. Rice forms a dense clump of slender leaves with grain heads that turn gold and droop as they ripen.
