@@ -8,6 +8,11 @@ After publishing, the action commits the next development version and changelog 
 
 ## Unreleased
 
+- All vanilla crops on sticks have new growth-stage models: golden wheat heads, taller feathery carrot tops and potato foliage, broad beet leaves, opening torchflowers, and low melon and pumpkin vines with round growing fruit. Plants stay rooted as they grow, with roots and tubers showing at soil level.
+- Tomatoes on sticks grow fuller foliage, yellow flowers, and round hanging fruit that ripens from green through blush to red.
+- Corn grows curved leaves, branching tassels, and ears that open to show ripe kernels. Rice forms a dense clump of slender leaves with grain heads that turn gold and droop as they ripen.
+- Sweet berries grow into leafy, branching bushes with visible berry clusters in their cages. Ordinary and weeping vines keep their familiar trailing shapes, with small raised leaves and hanging tips adding depth on trellises. Stems connect across stacked supports.
+
 ## 0.0.2-alpha
 
 - Mature crop sticks and sweet berry bushes spread onto an empty support of the same kind. The empty support has to be that plant's soil: loam for wheat, beets, pumpkin, torchflower, tomato, sweet berries, and corn; sandy or loam for carrots, potatoes, and melons; flooded mud for rice. After a plant is mature, one successful growth roll in five plants a neighbor.
