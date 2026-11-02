@@ -109,7 +109,8 @@ jobs:
           name: jars-26.3
           if-no-files-found: error
           path: |
-            build/libs/*/*.jar
+            build/libs/*/bed_and_branch-fabric-26.3-*.jar
+            build/libs/*/bed_and_branch-neoforge-26.3-*.jar
             !**/*-sources.jar
             !**/*-javadoc.jar
             !**/*-dev.jar
@@ -165,6 +166,7 @@ jobs:
 
       - name: Upload the release
         env:
+          GH_TOKEN: ${{ github.token }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
@@ -189,6 +191,7 @@ jobs:
 
       - name: Open the pull request
         env:
+          GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.notes.outputs.version }}
           NEXT: ${{ needs.notes.outputs.next }}
           TAG: ${{ github.ref_name }}
