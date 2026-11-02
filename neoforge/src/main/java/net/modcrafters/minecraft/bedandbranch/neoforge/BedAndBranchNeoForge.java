@@ -6,6 +6,7 @@ import net.modcrafters.minecraft.bedandbranch.block.ModBlocks;
 import net.modcrafters.minecraft.bedandbranch.command.BedCommands;
 import net.modcrafters.minecraft.bedandbranch.item.ModItems;
 import net.modcrafters.minecraft.bedandbranch.item.ModTab;
+import net.modcrafters.minecraft.bedandbranch.worldgen.ModFarms;
 import net.modcrafters.minecraft.bedandbranch.neoforge.client.BedAndBranchNeoForgeClient;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
@@ -34,6 +35,10 @@ public class BedAndBranchNeoForge {
     private static void registerContent(RegisterEvent event) {
         event.register(Registries.BLOCK, helper -> ModBlocks.register(helper::register));
         event.register(Registries.ITEM, helper -> ModItems.register(helper::register));
+        //? if >=26.3 {
+        event.register(Registries.FEATURE_TYPE, helper -> ModFarms.register(helper::register));
+        //?} else
+        //event.register(Registries.FEATURE, helper -> ModFarms.register(helper::register));
         event.register(Registries.CREATIVE_MODE_TAB, ModTab.ID.identifier(), () -> ModTab.titled(CreativeModeTab.builder())
                 .displayItems((parameters, output) -> ModItems.tabContents().forEach(output::accept))
                 .build());

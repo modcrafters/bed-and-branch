@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#bed_and_branch:has_abandoned_rice_farm",
+  "features": [
+    "bed_and_branch:pocket_paddy",
+    "bed_and_branch:split_beds",
+    "bed_and_branch:creekside_plot",
+    "bed_and_branch:terraced_patch",
+    "bed_and_branch:ruined_farmstead"
+  ],
+  "step": "vegetal_decoration"
+}
