@@ -32,7 +32,8 @@ def resolve(versions, types, game, loader, java):
 
     # 1.21.1 belongs to minecraft-1-21; 26.3 belongs to minecraft-26-3.
     category = "minecraft-" + "-".join(game.split(".")[:2])
-    result = [find(game, category), find(loader, "modloader")]
+    result = [find(game, category), find(loader, "modloader"),
+              find("Client", "environment"), find("Server", "environment")]
     java_id = find(java, "java", required=False)
     if java_id is not None:
         result.append(java_id)

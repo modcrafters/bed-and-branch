@@ -1,4 +1,4 @@
-"""Regression catalog captured from CurseForge on 2026-11-02."""
+"""Version catalog captured on 2026-11-02, with synthetic environment IDs."""
 import contextlib
 import io
 import json
@@ -16,11 +16,14 @@ resolve = runpy.run_path(str(Path(__file__).with_name("curseforge-version-ids.py
 TYPES = [
     {"id": 2, "slug": "java"},
     {"id": 615, "slug": "addons"},
+    {"id": 75208, "slug": "environment"},
     {"id": 68441, "slug": "modloader"},
     {"id": 77784, "slug": "minecraft-1-21"},
     {"id": 88556, "slug": "minecraft-26-3"},
 ]
 VERSIONS = [
+    {"id": 99901, "gameVersionTypeID": 75208, "name": "Client"},
+    {"id": 99902, "gameVersionTypeID": 75208, "name": "Server"},
     {"id": 7499, "gameVersionTypeID": 68441, "name": "Fabric"},
     {"id": 10150, "gameVersionTypeID": 68441, "name": "NeoForge"},
     {"id": 11135, "gameVersionTypeID": 2, "name": "Java 21"},
@@ -36,15 +39,15 @@ VERSIONS = [
 class CurseForgeVersionsTest(unittest.TestCase):
     def test_actual_duplicate_names_resolve_for_all_three_jars(self):
         for game, loader, java, expected in (
-            ("1.21.1", "NeoForge", "Java 21", [11779, 10150, 11135]),
-            ("26.3", "Fabric", "Java 25", [17045, 7499, 14454]),
-            ("26.3", "NeoForge", "Java 25", [17045, 10150, 14454]),
+            ("1.21.1", "NeoForge", "Java 21", [11779, 10150, 99901, 99902, 11135]),
+            ("26.3", "Fabric", "Java 25", [17045, 7499, 99901, 99902, 14454]),
+            ("26.3", "NeoForge", "Java 25", [17045, 10150, 99901, 99902, 14454]),
         ):
             with self.subTest(game=game, loader=loader):
                 self.assertEqual(resolve(VERSIONS, TYPES, game, loader, java), expected)
 
     def test_data_envelopes(self):
-        self.assertEqual(resolve({"data": VERSIONS}, {"data": TYPES}, "26.3", "Fabric", "Java 25"), [17045, 7499, 14454])
+        self.assertEqual(resolve({"data": VERSIONS}, {"data": TYPES}, "26.3", "Fabric", "Java 25"), [17045, 7499, 99901, 99902, 14454])
 
     def test_wrong_categories_are_not_used_as_fallback(self):
         versions = [row for row in VERSIONS if row["id"] != 11779]
@@ -66,12 +69,17 @@ class CurseForgeVersionsTest(unittest.TestCase):
 
     def test_optional_java_can_be_absent(self):
         with contextlib.redirect_stderr(io.StringIO()) as warning:
-            self.assertEqual(resolve(VERSIONS, TYPES, "26.3", "Fabric", "Java 99"), [17045, 7499])
+            self.assertEqual(resolve(VERSIONS, TYPES, "26.3", "Fabric", "Java 99"), [17045, 7499, 99901, 99902])
         self.assertIn("omitting optional Java", warning.getvalue())
 
     def test_empty_catalog_fails(self):
         with self.assertRaisesRegex(ValueError, "empty or invalid"):
             resolve([], TYPES, "26.3", "Fabric", "Java 25")
+
+    def test_required_environment_is_not_silently_omitted(self):
+        versions = [row for row in VERSIONS if row["name"] != "Server"]
+        with self.assertRaisesRegex(ValueError, "environment"):
+            resolve(versions, TYPES, "26.3", "Fabric", "Java 25")
 
     def test_publisher_preflight_and_resolved_upload_metadata(self):
         for valid in (False, True):
@@ -116,9 +124,9 @@ upload 0.0.2-alpha "$TEST_DIR/notes.md" "$TEST_DIR"
                     uploads = trace.read_text().splitlines()
                     self.assertEqual(len(uploads), 7)
                     self.assertEqual(uploads[3:6], [
-                        "CurseForge [11779, 10150, 11135]",
-                        "CurseForge [17045, 7499, 14454]",
-                        "CurseForge [17045, 10150, 14454]",
+                        "CurseForge [11779, 10150, 99901, 99902, 11135]",
+                        "CurseForge [17045, 7499, 99901, 99902, 14454]",
+                        "CurseForge [17045, 10150, 99901, 99902, 14454]",
                     ])
                 else:
                     self.assertNotEqual(result.returncode, 0)
