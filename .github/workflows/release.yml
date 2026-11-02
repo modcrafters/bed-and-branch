@@ -2,7 +2,7 @@ name: Release
 
 # Tag 0.0.1 to publish a release, or 0.0.1-alpha / 0.0.1-beta for that channel. A leading v
 # is also accepted. The version edit is made in the build checkout only, so the tag stays
-# on the commit you tagged. After the upload, a pull request sets main to the next patch
+# on the commit you tagged. After the upload, the action commits the next patch to main
 # and moves the published notes under that version.
 #
 # Repository secrets: MODRINTH_TOKEN, CURSEFORGE_TOKEN.
@@ -182,44 +182,15 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Open the pull request
+      - name: Commit the next version to main
         env:
-          GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.notes.outputs.version }}
           NEXT: ${{ needs.notes.outputs.next }}
           TAG: ${{ github.ref_name }}
-        run: |
-          set -euo pipefail
-          branch="after-${TAG}"
-          if gh pr list --base main --head "$branch" --state open --json number --jq 'length' | grep -qx 1; then
-            echo "Pull request for ${branch} is already open."
-            exit 0
-          fi
-          # The scripts from the tag do the edit. The branch they commit is main.
-          mkdir -p /tmp/release-scripts
-          cp .github/scripts/release-version.sh .github/scripts/release-changelog.sh .github/scripts/release-bump.sh /tmp/release-scripts/
-          git fetch origin main
-          git show "${TAG}:CHANGELOG.md" > /tmp/tag-changelog.md
-          git checkout -B "$branch" origin/main
-          bash /tmp/release-scripts/release-bump.sh "$VERSION" "$NEXT" CHANGELOG.md /tmp/tag-changelog.md gradle.properties > pr-body.md
-          echo >> pr-body.md
-          echo "Release: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/tag/${TAG}" >> pr-body.md
-          git diff --stat -- gradle.properties CHANGELOG.md
-          if git diff --quiet -- gradle.properties CHANGELOG.md; then
-            echo "main already has the next version and changelog heading."
-            exit 0
-          fi
-          git add gradle.properties CHANGELOG.md
-          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
-            commit -m "Set the development version to ${NEXT} after publishing ${TAG}."
-          git push origin "HEAD:${branch}"
-          gh pr create --base main --head "$branch" \
-            --title "Set the development version to ${NEXT}" \
-            --body-file pr-body.md
+        run: bash .github/scripts/release-commit.sh "$VERSION" "$NEXT" "$TAG"

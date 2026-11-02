@@ -2,7 +2,7 @@
 # Points main at the patch after a published tag. The published number itself is never
 # committed: the tag's jars already used it, and this only writes the following version.
 # Usage: release-bump.sh 0.2.0 0.2.1 CHANGELOG.md tag-changelog.md gradle.properties
-# Prints the pull request text. Exits 1 when the change would move the version backwards.
+# Prints a summary. Exits 1 when the change would move the version backwards.
 set -euo pipefail
 
 die() { echo "$1" >&2; exit 1; }
