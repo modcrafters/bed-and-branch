@@ -1,0 +1,23 @@
+name: Inspect release metadata
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  curseforge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect target game versions
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body -sS -H "X-Api-Token: ${CURSEFORGE_TOKEN}" \
+            https://minecraft.curseforge.com/api/game/versions > versions.json
+          jq '[.[] | select(.name == "1.21.1" or .name == "26.3" or .name == "NeoForge" or .name == "Fabric" or .name == "Java 21" or .name == "Java 25")]' versions.json
+          curl --fail-with-body -sS -H "X-Api-Token: ${CURSEFORGE_TOKEN}" \
+            https://minecraft.curseforge.com/api/game/version-types > types.json
+          jq '.' types.json
