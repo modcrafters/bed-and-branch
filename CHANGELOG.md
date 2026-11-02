@@ -2,7 +2,9 @@
 
 Each pull request adds its own bullets at the top of **Unreleased**, written for players. When a merge lands, the Discord message shows only the bullets that pull request added.
 
-To release, rename **Unreleased** to the version (for example `## 0.1.0`), use that section as the CurseForge changelog, and start a new empty **Unreleased** above it.
+Push a version tag to publish. Alpha and beta releases use only **Unreleased**. Stable releases include those new notes under the tagged version, followed by every alpha/beta section since the previous stable release, newest first. The first stable release includes all earlier alpha/beta sections. The same notes go to CurseForge, Modrinth, and GitHub.
+
+After publishing, the follow-up pull request renames **Unreleased** to the tagged version and starts a new empty **Unreleased** above it; earlier sections stay in place without duplication. Merge that pull request before the next release so its version history is available. A stable release with no new changes can publish the accumulated alpha/beta notes; its empty version heading still marks the cutoff for the next stable release.
 
 ## Unreleased
 

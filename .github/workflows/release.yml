@@ -63,7 +63,7 @@ jobs:
           echo "version=${version}" >> "$GITHUB_OUTPUT"
           echo "channel=${channel}" >> "$GITHUB_OUTPUT"
           echo "next=${next}" >> "$GITHUB_OUTPUT"
-          bash .github/scripts/release-changelog.sh extract CHANGELOG.md > release-notes.md
+          bash .github/scripts/release-changelog.sh notes CHANGELOG.md "$version" > release-notes.md
 
       - uses: actions/upload-artifact@v7
         with:

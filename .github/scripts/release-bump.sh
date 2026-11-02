@@ -31,7 +31,7 @@ elif cmp -s \
   <(bash "$here/release-changelog.sh" extract "$changelog") \
   <(bash "$here/release-changelog.sh" extract "$tagged"); then
   bash "$here/release-changelog.sh" bump "$changelog" "$released"
-  changelog_note="The notes that were published are under \`## ${released}\`, and \`## Unreleased\` is empty again."
+  changelog_note="The new notes are under \`## ${released}\`, and \`## Unreleased\` is empty again. Earlier version sections stay in place."
 else
   changelog_note="\`## Unreleased\` on main does not match the notes that were published, so the heading was left as it is."
 fi
