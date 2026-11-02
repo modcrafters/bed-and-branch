@@ -8,6 +8,8 @@ After publishing, the action commits the next development version and changelog 
 
 ## Unreleased
 
+## 0.0.2-alpha
+
 - Mature crop sticks and sweet berry bushes spread onto an empty support of the same kind. The empty support has to be that plant's soil: loam for wheat, beets, pumpkin, torchflower, tomato, sweet berries, and corn; sandy or loam for carrots, potatoes, and melons; flooded mud for rice. After a plant is mature, one successful growth roll in five plants a neighbor.
 - A full vine trellis spreads the same way, onto an empty ground trellis beside it, without waiting through another growth cycle first.
 - The Spread Now debug stick plants that neighbor immediately. Wheat on loam and rice on flooded mud cross into corn when the empty crop stick is on loam.
