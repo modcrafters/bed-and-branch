@@ -15,6 +15,7 @@ jobs:
       - uses: actions/checkout@v7
       - run: python3 .github/scripts/test_release_changelog.py
       - run: python3 .github/scripts/test_release_commit.py
+      - run: python3 .github/scripts/test_curseforge_versions.py
 
   mc-26-3:
     name: Minecraft 26.3 (Fabric + NeoForge)

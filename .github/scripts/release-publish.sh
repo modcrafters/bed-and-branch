@@ -13,6 +13,7 @@ die() { echo "$1" >&2; exit 1; }
 user_agent='modcrafters/bed-and-branch (release)'
 # Fabric API on Modrinth. The loader itself is selected with the loaders field.
 fabric_api='P7dR8mSH'
+here=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 
 check_env() {
   local missing=()
@@ -62,34 +63,8 @@ http_code() {
   printf '%s' "$code"
 }
 
-curseforge_version_id() {
-  local name=$1 required=$2 result
-  result=$(jq -r --arg name "$name" '
-    [ .[] | select(.name == $name) | .id ] | unique
-    | if length == 1 then "ok \(.[0])" else "bad \(length)" end
-  ' "$versions_file")
-  case "$result" in
-    ok\ *) echo "${result#ok }" ;;
-    *)
-      if [[ "$required" == yes ]]; then
-        echo "CurseForge has no single game version named ${name} (${result})." >&2
-        jq -r --arg name "$name" '.[] | select(.name | contains($name)) | .name' "$versions_file" | sort -u | head >&2 || true
-        exit 1
-      fi
-      echo "CurseForge has no single entry named ${name}; leaving it off this file." >&2
-      ;;
-  esac
-}
-
 curseforge_game_versions() {
-  local game=$1 loader=$2 java_name=$3 id ids=()
-  id=$(curseforge_version_id "$game" yes) || exit 1
-  ids+=("$id")
-  id=$(curseforge_version_id "$loader" yes) || exit 1
-  ids+=("$id")
-  id=$(curseforge_version_id "$java_name" no)
-  [[ -n "$id" ]] && ids+=("$id")
-  printf '%s\n' "${ids[@]}" | jq -R . | jq -s 'map(tonumber)'
+  python3 "$here/curseforge-version-ids.py" "$versions_file" "$types_file" "$@"
 }
 
 modrinth_upload() {
@@ -167,7 +142,7 @@ curseforge_listed() {
 }
 
 curseforge_upload() {
-  local display=$1 game=$2 loader=$3 java_name=$4 jar=$5
+  local display=$1 loader=$2 jar=$3 game_versions=$4
   local code relations='null'
   if curseforge_listed "$(basename "$jar")" "$display"; then
     echo "CurseForge already has ${display}"
@@ -178,7 +153,7 @@ curseforge_upload() {
     --rawfile changelog "$notes" \
     --arg display "$display" \
     --arg release_type "$release_type" \
-    --argjson game_versions "$(curseforge_game_versions "$game" "$loader" "$java_name")" \
+    --argjson game_versions "$game_versions" \
     --argjson relations "$relations" \
     '{
       changelog: $changelog,
@@ -217,7 +192,7 @@ github_release() {
 upload() {
   local version=$1
   notes=$2
-  local jars=$3 code
+  local jars=$3 code cf_neo_121 cf_fabric_263 cf_neo_263
   check_env
   [[ -f "$notes" ]] || die "No changelog at ${notes}"
   [[ -n "${TAG:-}" ]] || die "TAG is missing"
@@ -227,7 +202,7 @@ upload() {
   esac
   classify "$jars" "$version"
   work=$(mktemp -d)
-  trap 'rm -rf "$work"' EXIT
+  trap 'rm -f "$work/"*.json; rmdir "$work"' EXIT
 
   code=$(http_code "$work/versions.json" \
     -H "X-Api-Token: ${CURSEFORGE_TOKEN}" \
@@ -237,9 +212,22 @@ upload() {
     cat "$work/versions.json" >&2
     exit 1
   }
-  versions_file=$work/version-list.json
-  jq 'if type == "array" then . elif .data then .data else empty end' "$work/versions.json" > "$versions_file"
-  [[ "$(jq 'length' "$versions_file")" -gt 0 ]] || die "CurseForge returned no game versions"
+  versions_file=$work/versions.json
+  types_file=$work/types.json
+  code=$(http_code "$types_file" \
+    -H "X-Api-Token: ${CURSEFORGE_TOKEN}" \
+    https://minecraft.curseforge.com/api/game/version-types)
+  [[ "$code" == 200 ]] || {
+    echo "CurseForge game version types returned ${code}" >&2
+    cat "$types_file" >&2
+    exit 1
+  }
+
+  # Resolve every target before the first upload, so a catalog error cannot
+  # leave a release published only on Modrinth.
+  cf_neo_121=$(curseforge_game_versions 1.21.1 NeoForge "Java 21")
+  cf_fabric_263=$(curseforge_game_versions 26.3 Fabric "Java 25")
+  cf_neo_263=$(curseforge_game_versions 26.3 NeoForge "Java 25")
 
   code=$(http_code "$work/files.json" \
     -H "X-Api-Token: ${CURSEFORGE_TOKEN}" \
@@ -255,9 +243,9 @@ upload() {
   modrinth_upload "${version}+26.3+fabric" "Bed & Branch ${version} for Fabric 26.3" fabric 26.3 "$fabric_263"
   modrinth_upload "${version}+26.3+neoforge" "Bed & Branch ${version} for NeoForge 26.3" neoforge 26.3 "$neo_263"
 
-  curseforge_upload "Bed & Branch ${version} for NeoForge 1.21.1" 1.21.1 NeoForge "Java 21" "$neo_121"
-  curseforge_upload "Bed & Branch ${version} for Fabric 26.3" 26.3 Fabric "Java 25" "$fabric_263"
-  curseforge_upload "Bed & Branch ${version} for NeoForge 26.3" 26.3 NeoForge "Java 25" "$neo_263"
+  curseforge_upload "Bed & Branch ${version} for NeoForge 1.21.1" NeoForge "$neo_121" "$cf_neo_121"
+  curseforge_upload "Bed & Branch ${version} for Fabric 26.3" Fabric "$fabric_263" "$cf_fabric_263"
+  curseforge_upload "Bed & Branch ${version} for NeoForge 26.3" NeoForge "$neo_263" "$cf_neo_263"
 
   github_release "$TAG" "$neo_121" "$fabric_263" "$neo_263"
 }
